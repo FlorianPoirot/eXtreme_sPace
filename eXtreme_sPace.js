@@ -229,22 +229,6 @@ function deplacerLePersonnage(){
     }
 }
 
-function deplacerAGauche(entite){
-    entite.xPos-=entite.xPos-entite.speed<0?0:entite.speed;
-}
-
-function deplacerADroite(entite){
-    entite.xPos+=entite.xPos+entite.speed>380?0:entite.speed;
-}
-
-function deplacerEnHaut(entite){
-    entite.yPos-=entite.yPos-entite.speed<0?0:entite.speed;
-}
-
-function deplacerEnBas(entite){
-    entite.yPos+=entite.yPos+entite.speed>512?0:entite.speed;
-}
-
 
 
 
@@ -405,7 +389,7 @@ function deplacerEnHaut(entite){
 }
 
 function deplacerEnBas(entite){
-    entite.yPos+=entite.yPos+entite.speed>380?0:entite.speed;
+    entite.yPos+=entite.yPos+entite.speed>512?0:entite.speed;
 }
 
 
