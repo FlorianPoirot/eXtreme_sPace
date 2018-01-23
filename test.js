@@ -26,14 +26,19 @@ function dialogBox (message) {
 		messageGlobal = message;
 	}
 	deleteDialogue();
-
+	console.log(document.documentElement.clientWidth);
 	var div = document.createElement('p');
 	div.setAttribute("id", "dialogBox");
 	div.style.zIndex=999;
-	div.style.position="absolute";
-	div.style.width = document.documentElement.clientWidth/2+"px";
-	div.style.top = (document.documentElement.clientHeight-15)+"px";
-	div.style.left = document.documentElement.clientWidth/4+"px";
+	div.style.position="fixed";
+	div.setAttribute("class", "col-sm-8 col-sm-offset-2");
+	//div.style.width = document.documentElement.clientWidth/2+"px";
+	//div.style.top = (document.documentElement.clientHeight)+"px";
+	//div.style.left = document.documentElement.clientWidth/4+"px";
+	div.style.height = "15%";
+	div.style.wordWrap = "break-word";
+	div.style.bottom = "-10px";
+	div.style.left = "0px";
 	div.style.fontSize = "3px";
 	div.style.border = "double 1px";
 	div.style.backgroundColor = "white";
