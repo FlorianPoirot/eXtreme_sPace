@@ -508,6 +508,15 @@ function dialogBox (message) {
     document.getElementById('game').appendChild(div);
 }
 
+
+function deleteDialogue () {
+    var element = document.getElementById("dialogBox");
+    if (element!=null) {
+        element.outerHTML = "";
+        delete element;
+    }
+}
+
 function countTimer() { 
   //avancement du timer 
   document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
@@ -549,6 +558,7 @@ document.onload = init();
 var totalSeconds = 300;//initalisation du timer de début
 var totalSecondsInit = 300;//initalisation et début du timer 
 var timerVar = setInterval(countTimer, 1000); 
+dialogBox("palleja : JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP !");
 
 
 zoom = 6;
