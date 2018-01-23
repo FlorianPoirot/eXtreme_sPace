@@ -51,15 +51,6 @@
         BG          = 6;
         BD          = 10;
 
-//Variables servant à relancer la partie.
-var charXPosInitial = 0;
-var charYPosInitial = 0;
-
-var protege=false;
-var dialogBoxShown = false;
-
-var tailleCase = 24;
-
 
 function loop(timestamp) {
     if (!jeu_commence)
@@ -97,22 +88,24 @@ function init(){
     keys = {};
     document.body.onkeyup = 
     document.body.onkeydown = function(evt){
-        evt = evt || window.evt;
-        var charCode = evt.keyCode || evt.which;
-        if (charCode != F12KEY && (charCode<96 || charCode >105) && charCode !=8 && charCode != F5KEY)
-            evt.preventDefault();
-        if(charCode==SPACEKEY && evt.type == 'keydown'){
-            if (dialogBoxShown){
-                deleteDialogue();
-            }else{
-                characterMiddleX = character.xPos + (character.width)/2;
-                characterMiddleY = character.yPos + (character.height)/2;
-                var pointClique = getPointClique(characterMiddleX, characterMiddleY);
-                var objetClique = getObjetClique(pointClique);
-                afficheDialogue(objetClique);
+        if(!popupOuverte){
+            evt = evt || window.evt;
+            var charCode = evt.keyCode || evt.which;
+            if (charCode != F12KEY && (charCode<96 || charCode >105) && charCode !=8 && charCode != F5KEY)
+                evt.preventDefault();
+            if(charCode==SPACEKEY && evt.type == 'keydown'){
+                if (dialogBoxShown){
+                    deleteDialogue();
+                }else{
+                    characterMiddleX = character.xPos + (character.width)/2;
+                    characterMiddleY = character.yPos + (character.height)/2;
+                    var pointClique = getPointClique(characterMiddleX, characterMiddleY);
+                    var objetClique = getObjetClique(pointClique);
+                    afficheDialogue(objetClique);
+                }
             }
+            keys[charCode]= evt.type == 'keydown';
         }
-        keys[charCode]= evt.type == 'keydown';
     };
 
     window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 528*zoom-(window.innerHeight/2)));
@@ -125,7 +118,13 @@ var afficheDialogue = function(objet){
             dialogBox("C'est la porte Nord, elle mène au cockpit.");
             break;
         case porteSud:
-            dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau.");
+            if(porteSud.verouillee) {
+                modalCustom.style.display = "block";
+                popupOuverte = true;
+                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverouiller.");
+            }else{
+                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverouillée.");
+            }
             break;
         case bibliotheque:
             dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
@@ -742,12 +741,96 @@ function countTimer() {
   } 
 } 
 
+/*function popUp (x,y) {
+    popupOuverte = true;
+    var div = document.createElement('div');
+    div.style.zIndex=999;
+    div.style.position="absolute";
+    div.style.top = x+"px";
+    div.style.left = y+"px";
+    div.style.fontWeight = "bold";
+    div.innerHTML ='<div class="row col-sm-8 col-sm-offset-2 popup-brutforce" id="gamePopUp">'+
+                        '<div class="form-group">'+
+                            '<label for="exampleInputEmail1">Code à remplir : </label>'+
+                            '<p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">\'c4b0318bd5d514c92276e5cb55ce15359ce66579\' codé en sha1. </span> </p>'+
+                            '<p style="color:red;"><b>Le nom de la fonction devra impérativement s\'appeler : deverouillage() </b></p>'+
+                        '</div>'+
+                        '<div class="form-group">'+
+                          '<textarea name="code" rows="8" id="code"></textarea>'+
+                        '</div>'+
+                        '<button id="truc" class="btn btn-default pull-right">Envoyé</button>'+
+                    '</div>';
+    document.body.appendChild(div);
+}*/
+
+function resizeBody () {
+    document.body.style.width = document.documentElement.clientWidth;
+    document.body.style.height = document.documentElement.clientHeight;
+    console.log("test"+document.documentElement.clientWidth);
+}
+
+$( document ).ready(function() {
+  $('#truc').click(function(ev) {
+    var leThis = $(this);
+    var leCode = $('#code').val();
+        $.ajax({
+            url : 'deverouillage.php',
+            type : 'POST',
+            data : 'code='+ leCode,
+            dataType : 'json',
+            success : function(json) {
+                console.log(json);
+                if(porteSud.verouillee){
+                    if(json.resultat){
+                        console.log("DOGE !!!");
+                        porteSud.verouillee=false;
+                        dialogBox("SUPER !! J'ai déverouillé la porte !!!");
+                        popupOuverte = false;
+                        modalCustom.style.display = "none";
+                    }else{
+                        dialogBox("MINCE ! J'ai fait une erreur dans mon code !");
+                    }
+                }
+                //console.log("bonjour");
+                // if (
+                //  (leThis.attr('data-action') == "publie" && json.publie)
+                //  || (leThis.attr('data-action') == "valide" && json.valide)
+                // ) {
+                //  leThis.attr('class', 'btn btn-success'); //change la classe en danger
+                //  leThis.text('Oui').text(); //change la valeur du bouton
+                // } else if (
+                //  (leThis.attr('data-action') == "publie" && ! json.publie)
+                //  || (leThis.attr('data-action') == "valide" && ! json.valide)
+                // ) {
+                //  leThis.attr('class', 'btn btn-danger'); //change la classe en danger
+                //  leThis.text('Non').text();
+                // }
+            },
+            error : function(statut) {
+                // leThis.attr('class', 'btn btn-danger'); //change la classe en danger
+                // leThis.text('Error').text();
+            }
+        });
+    });
+});
+
+
+var charXPosInitial = 0;
+var charYPosInitial = 0;
+
+var protege=false;
+var dialogBoxShown = false;
+
+var tailleCase = 24;
+
 zoom = 6;
 var messageGlobal;
 document.onload = init();
 var totalSeconds = 180;//initalisation du timer de début
 var totalSecondsInit = 180;//initalisation et début du timer 
 var timerVar = setInterval(countTimer, 1000); 
+
+var popupOuverte = false;
 
 
 game_container.style.zoom=zoom;

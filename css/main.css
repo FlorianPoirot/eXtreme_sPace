@@ -29,3 +29,13 @@
   	height: 20px;
   	z-index: 90000;
 }
+
+.popup-brutforce{
+  width: 500px;
+  background: #a1afb8;
+  padding: 10px;
+}
+
+.popup-brutforce textarea{
+  width: 100%;
+}

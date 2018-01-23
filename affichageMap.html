@@ -7,7 +7,7 @@
     <title>eXtreme sPace</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
   </head>
@@ -141,6 +141,43 @@
       <img src="" style="left: 192px; top: 480px"> <img src="" style="left: 216px; top: 480px"> <img src="" style="left: 240px; top: 480px"> <img src="" style="left: 264px; top: 480px">
       <img src="" style="left: 288px; top: 480px"> <img src="" style="left: 312px; top: 480px"> <img src="" style="left: 336px; top: 480px"> <img src="" style="left: 360px; top: 480px">
     </div>
+
+    <button id="myBtn">Open Modal</button>
+    <div id="myModal" class="modalCustom">
+      <div class="modalCustom-content">
+        <span class="close">&times;</span>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Code à remplir : </label>
+            <p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">\'c4b0318bd5d514c92276e5cb55ce15359ce66579\' codé en sha1. </span> </p>
+            <p style="color:red;"><b>Le nom de la fonction devra impérativement s\'appeler : deverouillage() </b></p>
+          </div>
+            <div class="form-group">
+            <textarea name="code" rows="20" id="code"></textarea>
+            <button id="truc" class="btn btn-default pull-right">Envoyé</button>
+          </div>
+          
+      </div>
+    </div>
+
+    <script>
+      var modalCustom = document.getElementById('myModal');
+      var btn = document.getElementById("myBtn");
+      var span = document.getElementsByClassName("close")[0];
+
+      btn.onclick = function() {
+          modalCustom.style.display = "block";
+      }
+
+      span.onclick = function() {
+          modalCustom.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+          if (event.target == modalCustom) {
+              modalCustom.style.display = "none";
+          }
+      }
+  </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
