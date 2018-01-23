@@ -85,6 +85,8 @@ function init(){
     recuperePorteSud();
     recupereBibliotheque();
     recuperePC();
+    recupereCaissonGauche();
+    recupereCaissonDroite();
 
     jeu_commence = true;
 
@@ -127,6 +129,12 @@ var afficheDialogue = function(objet){
         case pc:
             dialogBox("C'est l'ordinateur central, il permet de piloter le vaisseau.");
             break;
+        case caissonGauche:
+            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
+            break;
+        case caissonDroite:
+            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
+            break;
     }
 }
 
@@ -139,6 +147,10 @@ var getObjetClique = function(point){
         return bibliotheque;
     }else if(pointDans(pc, point)){
         return pc;
+    }else if(pointDans(caissonGauche, point)){
+        return caissonGauche;
+    }else if(pointDans(caissonDroite, point)){
+        return caissonDroite;
     }
 }
 
@@ -175,6 +187,32 @@ var recuperePersonnage = function(){
         height: parseInt(persoHTML.style.height.replace("px", "")),
         direction: BAS,
         model: persoHTML
+    };
+}
+
+var recupereCaissonGauche = function(){
+    var caissonGaucheHTML = document.getElementById("caissonGauche");
+    caissonGauche = {
+        speed: 1,
+        xPos: parseInt(caissonGaucheHTML.style.left.replace("px", "")),
+        yPos: parseInt(caissonGaucheHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: 2*tailleCase,
+        direction: BAS,
+        model: caissonGaucheHTML
+    };
+}
+
+var recupereCaissonDroite = function(){
+    var caissonDroiteHTML = document.getElementById("caissonDroite");
+    caissonDroite = {
+        speed: 1,
+        xPos: parseInt(caissonDroiteHTML.style.left.replace("px", "")),
+        yPos: parseInt(caissonDroiteHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: 2*tailleCase,
+        direction: BAS,
+        model: caissonDroiteHTML
     };
 }
 
