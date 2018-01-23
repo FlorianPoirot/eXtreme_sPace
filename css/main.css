@@ -16,6 +16,16 @@
   width: 100%;
   top: 0px;
   height: 20px;
-  background: #4b4444;
+  background: green;
   z-index: 90001;
+}
+
+#tempsRestant{
+	color: white;
+  	position: fixed;
+  	font-size: 1.2em;
+  	top: 0px;
+  	right: 205px;
+  	height: 20px;
+  	z-index: 90000;
 }
