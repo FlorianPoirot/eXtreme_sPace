@@ -167,6 +167,7 @@ var recuperePorteSud = function(){
 
 var draw = function (argument) {
     affichePersonage();
+    window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 400*zoom-(window.innerHeight/2)));
 }
 
 function affichePersonage(){
