@@ -87,6 +87,10 @@ function init(){
     recuperePC();
     recupereCaissonGauche();
     recupereCaissonDroite();
+    recupereGrandBureau();
+    recuperePetitBreau();
+    recupereLitUn();
+    recupereLitDeux();
 
     jeu_commence = true;
 
@@ -135,6 +139,18 @@ var afficheDialogue = function(objet){
         case caissonDroite:
             dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
             break;
+        case grandBureau:
+            dialogBox("C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
+            break;
+        case petitBureau:
+            dialogBox("C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
+            break;
+        case litUn:
+            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            break;
+        case litDeux:
+            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            break;
     }
 }
 
@@ -151,6 +167,14 @@ var getObjetClique = function(point){
         return caissonGauche;
     }else if(pointDans(caissonDroite, point)){
         return caissonDroite;
+    }else if(pointDans(grandBureau, point)){
+        return grandBureau;
+    }else if(pointDans(petitBureau, point)){
+        return petitBureau;
+    }else if(pointDans(litUn, point)){
+        return litUn;
+    }else if(pointDans(litDeux, point)){
+        return litDeux;
     }
 }
 
@@ -198,7 +222,6 @@ var recupereCaissonGauche = function(){
         yPos: parseInt(caissonGaucheHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: 2*tailleCase,
-        direction: BAS,
         model: caissonGaucheHTML
     };
 }
@@ -211,8 +234,55 @@ var recupereCaissonDroite = function(){
         yPos: parseInt(caissonDroiteHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: 2*tailleCase,
-        direction: BAS,
         model: caissonDroiteHTML
+    };
+}
+
+var recupereLitUn = function(){
+    var litUnHTML = document.getElementById("lit1");
+    litUn = {
+        speed: 1,
+        xPos: parseInt(litUnHTML.style.left.replace("px", "")),
+        yPos: parseInt(litUnHTML.style.top.replace("px", "")),
+        width: 2*tailleCase,
+        height: tailleCase,
+        model: litUnHTML
+    };
+}
+
+var recupereLitDeux = function(){
+    var litDeuxHTML = document.getElementById("lit2");
+    litDeux = {
+        speed: 1,
+        xPos: parseInt(litDeuxHTML.style.left.replace("px", "")),
+        yPos: parseInt(litDeuxHTML.style.top.replace("px", "")),
+        width: 2*tailleCase,
+        height: tailleCase,
+        model: litDeuxHTML
+    };
+}
+
+var recupereGrandBureau = function(){
+    var grandBureauHTML = document.getElementById("grandBureau");
+    grandBureau = {
+        speed: 1,
+        xPos: parseInt(grandBureauHTML.style.left.replace("px", "")),
+        yPos: parseInt(grandBureauHTML.style.top.replace("px", "")),
+        width: 3*tailleCase,
+        height: tailleCase,
+        model: grandBureauHTML
+    };
+}
+
+var recuperePetitBreau = function(){
+    var petitBureauHTML = document.getElementById("petitBureau");
+    petitBureau = {
+        speed: 1,
+        xPos: parseInt(petitBureauHTML.style.left.replace("px", "")),
+        yPos: parseInt(petitBureauHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: petitBureauHTML
     };
 }
 
@@ -224,7 +294,6 @@ var recuperePC = function(){
         yPos: parseInt(PCHTML.style.top.replace("px", "")),
         width: 3*tailleCase,
         height: tailleCase,
-        direction: BAS,
         model: PCHTML
     };
 }
@@ -236,7 +305,6 @@ var recupereBibliotheque = function(){
         yPos: parseInt(bibliothequeHTML.style.top.replace("px", "")),
         width: 3*tailleCase,
         height: tailleCase,
-        direction: BAS,
         model: bibliothequeHTML
     }
 }
@@ -257,7 +325,6 @@ var recupereObstacle = function(obstacleHTML){
         yPos: parseInt(obstacleHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: tailleCase,
-        direction: BAS,
         model: obstacleHTML
     };
     return mur;
@@ -678,8 +745,8 @@ function countTimer() {
 zoom = 6;
 var messageGlobal;
 document.onload = init();
-var totalSeconds = 3600;//initalisation du timer de début
-var totalSecondsInit = 3600;//initalisation et début du timer 
+var totalSeconds = 180;//initalisation du timer de début
+var totalSecondsInit = 180;//initalisation et début du timer 
 var timerVar = setInterval(countTimer, 1000); 
 
 
