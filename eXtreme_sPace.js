@@ -375,7 +375,7 @@ function affichePersonage(){
         character.model.src = "./resImg/persoAvant.png";
       }
     }else if(character.direction == HAUT){
-      if(keys[UPKEY] || keys[ZKEY]) {
+      if(keys[UPKEY] || keys[ZKEY] || keys[WKEY]) {
         if ( character.model.getAttribute("src") != "resImg/persoArriereMarche.gif") {
           character.model.src = "resImg/persoArriereMarche.gif";
         }
@@ -383,7 +383,7 @@ function affichePersonage(){
         character.model.src = "./resImg/persoArriere.png";
       }
     }else if(character.direction == GAUCHE){
-      if(keys[LEFTKEY] || keys[QKEY]) {
+      if(keys[LEFTKEY] || keys[QKEY] || keys[AKEY]) {
         if ( character.model.getAttribute("src") != "resImg/persoGaucheMarche.gif") {
           character.model.src = "resImg/persoGaucheMarche.gif";
         }
