@@ -32,9 +32,9 @@
       <img id="porteSud" src="./resImg/porte.png" style="left: 120px; top: 360px; z-index: 2">
       <img id="grandBureau" class="obstacle" src="./resImg/grand_bureau.gif" style="left: 24px; top: 240px; z-index: 2">
       <img id="petitBureau" class="obstacle" src="./resImg/bureau.gif" style="left: 216px; top: 336px; z-index: 2">
-      <img class="obstacle" src="./resImg/console.png" style="left: 120px; top: 408px; z-index: 2">
+      <img id="console" class="obstacle" src="./resImg/console.png" style="left: 120px; top: 408px; z-index: 2">
       <img class="obstacle" src="./resImg/reacteur.gif" style="left: 96px; top: 456px; z-index: 2">
-      <img id="personnage" src="./resImg/personnage.jpg" style="left: 120px; top: 72px; width: 16px; height: 16px; z-index: 10">
+      <img id="personnage" src="./resImg/personnage.jpg" style="left: 124px; top: 76px; width: 16px; height: 16px; z-index: 10">
 
       <img src="" style="left: 0px; top: 0px"> <img src="" style="left: 24px; top: 0px"> <img src="" style="left: 48px; top: 0px"> <img src="" style="left: 72px; top: 0px">
       <img src="" style="left: 96px; top: 0px"> <img src="" style="left: 120px; top: 0px"> <img src="" style="left: 144px; top: 0px"> <img src="" style="left: 168px; top: 0px">
@@ -141,9 +141,7 @@
       <img src="" style="left: 192px; top: 480px"> <img src="" style="left: 216px; top: 480px"> <img src="" style="left: 240px; top: 480px"> <img src="" style="left: 264px; top: 480px">
       <img src="" style="left: 288px; top: 480px"> <img src="" style="left: 312px; top: 480px"> <img src="" style="left: 336px; top: 480px"> <img src="" style="left: 360px; top: 480px">
     </div>
-
-    <button id="myBtn">Open Modal</button>
-    <div id="myModal" class="modalCustom">
+    <div id="myModal" class="modalCustom" style="z-index:9999">
       <div class="modalCustom-content">
         <span class="close">&times;</span>
           <div class="form-group">
@@ -163,10 +161,6 @@
       var modalCustom = document.getElementById('myModal');
       var btn = document.getElementById("myBtn");
       var span = document.getElementsByClassName("close")[0];
-
-      btn.onclick = function() {
-          modalCustom.style.display = "block";
-      }
 
       span.onclick = function() {
           modalCustom.style.display = "none";

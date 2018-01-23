@@ -82,6 +82,7 @@ function init(){
     recuperePetitBreau();
     recupereLitUn();
     recupereLitDeux();
+    recupereConsole();
 
     jeu_commence = true;
 
@@ -150,6 +151,14 @@ var afficheDialogue = function(objet){
         case litDeux:
             dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
+        case console:
+            if (!gagne){
+                dialogBox("Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
+                gagne = true;
+            } else {
+                dialogBox("Le réacteur est réparé, nous pouvons rentrer chez nous.");
+            }
+            break;
     }
 }
 
@@ -174,6 +183,8 @@ var getObjetClique = function(point){
         return litUn;
     }else if(pointDans(litDeux, point)){
         return litDeux;
+    }else if(pointDans(console, point)){
+        return console;
     }
 }
 
@@ -210,6 +221,19 @@ var recuperePersonnage = function(){
         height: parseInt(persoHTML.style.height.replace("px", "")),
         direction: BAS,
         model: persoHTML
+    };
+}
+
+var recupereConsole = function(){
+    var consoleHTML = document.getElementById("console");
+    console = {
+        speed: 1,
+        xPos: parseInt(consoleHTML.style.left.replace("px", "")),
+        yPos: parseInt(consoleHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        direction: BAS,
+        model: consoleHTML
     };
 }
 
@@ -730,39 +754,43 @@ function deleteDialogue () {
 }
 
 function countTimer() {
-  //avancement du timer
-  document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
-  if (totalSeconds > 0) {
-  --totalSeconds;
-  var hour = Math.floor(totalSeconds /3600);
-  var minute = Math.floor((totalSeconds - hour*3600)/60);
-  var seconds = totalSeconds - (hour*3600 + minute*60);
-  var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds;
-  if (hour<10) {echoHour = "0"+hour}
-  if (minute<10) {echoMinute = "0"+minute}
-  if (seconds<10) {echoSeconds = "0"+seconds}
-    /*var timer = document.getElementById("timer");
-    //timer.style.border = "solid 2px";
-    timer.style.zIndex=999;
-    timer.style.fontSize = "20px";
-    timer.style.left = "0px";
-    timer.style.top = "0px";
-    timer.style.font = "bold 20px arial,serif";
-    timer.innerHTML = echoHour + ":" + echoMinute + ":" + echoSeconds; */
-  } else {
-    clearInterval(timerVar);
-    var game = document.getElementById("game");
-    var player = document.querySelector('#audioPlayer');
-    player.play();
+    //avancement du timer
+    document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
+    if (!gagne){
+        if (totalSeconds > 0) {
+        --totalSeconds;
+        var hour = Math.floor(totalSeconds /3600);
+        var minute = Math.floor((totalSeconds - hour*3600)/60);
+        var seconds = totalSeconds - (hour*3600 + minute*60);
+        var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds;
+        if (hour<10) {echoHour = "0"+hour}
+        if (minute<10) {echoMinute = "0"+minute}
+        if (seconds<10) {echoSeconds = "0"+seconds}
+            /*var timer = document.getElementById("timer");
+            //timer.style.border = "solid 2px";
+            timer.style.zIndex=999;
+            timer.style.fontSize = "20px";
+            timer.style.left = "0px";
+            timer.style.top = "0px";
+            timer.style.font = "bold 20px arial,serif";
+            timer.innerHTML = echoHour + ":" + echoMinute + ":" + echoSeconds; */
+        } else {
+            clearInterval(timerVar);
+            var game = document.getElementById("game");
+            var player = document.querySelector('#audioPlayer');
+            player.play();
 
-    game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"
-    jeu_commence = false;
-  }
+            game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"
+            jeu_commence = false;
+        }
+    } else {
+        totalSeconds = totalSecondsInit;
+    }
 }
 
 /*function popUp (x,y) {
@@ -803,16 +831,16 @@ $( document ).ready(function() {
             data : 'code='+ leCode,
             dataType : 'json',
             success : function(json) {
-                console.log(json);
                 if(porteSud.verouillee){
                     if(json.resultat){
-                        console.log("DOGE !!!");
                         porteSud.verouillee=false;
                         dialogBox("SUPER !! J'ai déverouillé la porte !!!");
                         popupOuverte = false;
                         modalCustom.style.display = "none";
                     }else{
                         dialogBox("MINCE ! J'ai fait une erreur dans mon code !");
+                        popupOuverte = false;
+                        modalCustom.style.display = "none";
                     }
                 }
                 //console.log("bonjour");
@@ -838,6 +866,7 @@ $( document ).ready(function() {
     });
 });
 
+var gagne = false;
 
 var charXPosInitial = 0;
 var charYPosInitial = 0;
@@ -858,3 +887,9 @@ var popupOuverte = false;
 
 
 game_container.style.zoom=zoom;
+
+/*
+function deverouillage(){
+    return "ACDC";
+}
+*/
