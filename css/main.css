@@ -88,3 +88,10 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+#dialogBox {
+  font-size:  0.4em !important;
+  overflow: scroll;
+  text-align: justify;
+  text-justify: inter-word !important;
+}
