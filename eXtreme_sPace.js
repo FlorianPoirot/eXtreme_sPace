@@ -120,9 +120,9 @@ var recuperePersonnage = function(){
 
 var recupereObstacles = function(){
     var obstaclesTabHTML = document.getElementsByClassName("obstacle");
-    nbMurs = obstaclesTabHTML.length;
+    nbObstacles = obstaclesTabHTML.length;
     tabObstacles = {};
-    for(var i =0; i<nbMurs; i++){
+    for(var i =0; i<nbObstacles; i++){
         var mur = recupereObstacle(obstaclesTabHTML[i]);
         tabObstacles[i] = mur;
     }
@@ -147,6 +147,8 @@ var recuperePorteNord = function(){
         yPos: parseInt(porteNordHTML.style.top.replace("px", "")),
         width: 24,
         height: 24,
+        verouillee: false,
+        numObstacle: -1,
         model: porteNord
     };
 }
@@ -159,6 +161,8 @@ var recuperePorteSud = function(){
         yPos: parseInt(porteSudHTML.style.top.replace("px", "")),
         width: 24,
         height: 24,
+        verouillee: true,
+        numObstacle: -1,
         model: porteSud
     };
 }
@@ -167,7 +171,7 @@ var recuperePorteSud = function(){
 
 var draw = function (argument) {
     affichePersonage();
-    window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 400*zoom-(window.innerHeight/2)));
+    window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 528*zoom-(window.innerHeight/2)));
 }
 
 function affichePersonage(){
@@ -180,8 +184,58 @@ function affichePersonage(){
 
 
 var update = function (argument) {
+    updatePortes();
     deplacerLePersonnage();
     detectePorte();
+}
+
+var updatePortes = function (){
+    updatePorteNord();
+    updatePorteSud();
+}
+
+var updatePorteNord = function (){
+    if(porteNord.verouillee){
+        if (tabObstacles[porteNord.numObstacle] == undefined) {
+            porteNord.model.className = "obstacle";
+            porteNord.numObstacle = nbObstacles;
+            tabObstacles[nbObstacles] = porteNord;
+            nbObstacles ++;
+        }
+    }else{
+        porteNord.model.className = "";
+        if(tabObstacles[porteNord.numObstacle] != undefined){
+            delete tabObstacles[porteNord.numObstacle];
+            if(porteSud.numObstacle>porteNord.numObstacle && porteNord.numObstacle!=-1){
+                porteSud.numObstacle = porteNord.numObstacle;
+                tabObstacles[porteSud.numObstacle] = porteSud;
+            }
+            nbObstacles -=1;
+            porteNord.numObstacle=-1;
+        }
+    }
+}
+
+var updatePorteSud = function (){
+    if(porteSud.verouillee){
+        if (tabObstacles[porteSud.numObstacle] == undefined) {
+            porteSud.model.className = "obstacle";
+            porteSud.numObstacle = nbObstacles;
+            tabObstacles[nbObstacles] = porteSud;
+            nbObstacles ++;
+        }
+    }else{
+        porteSud.model.className = "";
+        if(tabObstacles[porteSud.numObstacle] != undefined){
+            delete tabObstacles[porteSud.numObstacle];
+            if(porteNord.numObstacle>porteSud.numObstacle && porteSud.numObstacle!=-1){
+                porteNord.numObstacle = porteSud.numObstacle;
+                tabObstacles[porteNord.numObstacle] = porteNord;
+            }
+            nbObstacles -=1;
+            porteSud.numObstacle=-1;
+        }
+    }
 }
 
 function deplacerLePersonnage(){
@@ -210,12 +264,14 @@ function deplacerLePersonnage(){
 var tolerancePorte = 2;
 var detectePorte = function(){
     if(collision(character, porteNord, tolerancePorte)){
-        porteNord.model.src = "./resImg/porte_ouverte.gif";
+        if (!porteNord.verouillee)
+            porteNord.model.src = "./resImg/porte_ouverte.gif";
     }else{
         porteNord.model.src = "./resImg/porte.png";
     }
     if(collision(character, porteSud, tolerancePorte)){
-        porteSud.model.src = "./resImg/porte_ouverte.gif";
+        if (!porteSud.verouillee)
+            porteSud.model.src = "./resImg/porte_ouverte.gif";
     }else{
         porteSud.model.src = "./resImg/porte.png";
     }
@@ -230,7 +286,7 @@ var toleranceObstacle = 0;
 function toucheUnObstacleDeLaGauche(entite){
     var touche=false;
     var i=0;
-    while(i<nbMurs && !touche){
+    while(i<nbObstacles && !touche){
         touche = touche || toucheLObstacleDeLaGauche(tabObstacles[i], entite);
         i++;
     }
@@ -256,7 +312,7 @@ function toucheLObstacleDeLaGauche(brique, entite){
 function toucheUnObstacleDenHaut(entite){
     var touche=false;
     var i=0;
-    while(i<nbMurs && !touche){
+    while(i<nbObstacles && !touche){
         touche = touche || toucheLObstacleDenHaut(tabObstacles[i], entite);
         i++;
     }
@@ -282,7 +338,7 @@ function toucheLObstacleDenHaut(brique, entite){
 function toucheUnObstacleDenBas(entite){
     var touche=false;
     var i=0;
-    while(i<nbMurs && !touche){
+    while(i<nbObstacles && !touche){
         touche = touche || toucheLObstacleDenBas(tabObstacles[i], entite);
         i++;
     }
@@ -308,7 +364,7 @@ function toucheLObstacleDenBas(brique, entite){
 function toucheUnObstacleDeLaDroite(entite){
     var touche=false;
     var i=0;
-    while(i<nbMurs && !touche){
+    while(i<nbObstacles && !touche){
         touche = touche || toucheLObstacleDeLaDroite(tabObstacles[i], entite);
         i++;
     }
