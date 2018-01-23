@@ -58,6 +58,8 @@ var charYPosInitial = 0;
 var protege=false;
 var dialogBoxShown = false;
 
+var tailleCase = 24;
+
 
 function loop(timestamp) {
     if (!jeu_commence)
@@ -81,6 +83,7 @@ function init(){
     recupereObstacles();
     recuperePorteNord();
     recuperePorteSud();
+    recupereBibliotheque();
 
     jeu_commence = true;
 
@@ -117,6 +120,9 @@ var afficheDialogue = function(objet){
         case porteSud:
             dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau.");
             break;
+        case bibliotheque:
+            dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
+            break;
     }
 }
 
@@ -125,6 +131,8 @@ var getObjetClique = function(point){
         return porteNord;
     }else if(pointDansPorteSud(point)){
         return porteSud;
+    }else if(pointDansBibliotheque(point)){
+        return bibliotheque;
     }
 }
 
@@ -136,20 +144,24 @@ var pointDansPorteSud = function(point){
     return point.characterMiddleX<porteSud.xPos+porteSud.width && point.characterMiddleX>porteSud.xPos && point.characterMiddleY<porteSud.yPos+porteSud.height && point.characterMiddleY>porteSud.yPos;
 }
 
+var pointDansBibliotheque = function(point){
+    return point.characterMiddleX<bibliotheque.xPos+bibliotheque.width && point.characterMiddleX>bibliotheque.xPos && point.characterMiddleY<bibliotheque.yPos+bibliotheque.height && point.characterMiddleY>bibliotheque.yPos;
+}
+
 var getPointClique = function(characterMiddleX, characterMiddleY){
     var pointClique = {characterMiddleX, characterMiddleY};
     switch (character.direction){
         case HAUT: 
-            pointClique.characterMiddleY -= 24;
+            pointClique.characterMiddleY -= tailleCase;
             break;
         case BAS: 
-            pointClique.characterMiddleY += 24;
+            pointClique.characterMiddleY += tailleCase;
             break;
         case GAUCHE: 
-            pointClique.characterMiddleX -= 24;
+            pointClique.characterMiddleX -= tailleCase;
             break;
         case DROITE: 
-            pointClique.characterMiddleX += 24;
+            pointClique.characterMiddleX += tailleCase;
             break;
     }
     return pointClique;
@@ -168,6 +180,18 @@ var recuperePersonnage = function(){
     };
 }
 
+var recupereBibliotheque = function(){
+    var bibliothequeHTML = document.getElementById("bibliotheque");
+    bibliotheque = {
+        xPos: parseInt(bibliothequeHTML.style.left.replace("px", "")),
+        yPos: parseInt(bibliothequeHTML.style.top.replace("px", "")),
+        width: 3*tailleCase,
+        height: tailleCase,
+        direction: BAS,
+        model: bibliothequeHTML
+    }
+}
+
 var recupereObstacles = function(){
     var obstaclesTabHTML = document.getElementsByClassName("obstacle");
     nbObstacles = obstaclesTabHTML.length;
@@ -182,8 +206,8 @@ var recupereObstacle = function(obstacleHTML){
     var mur = {
         xPos: parseInt(obstacleHTML.style.left.replace("px", "")),
         yPos: parseInt(obstacleHTML.style.top.replace("px", "")),
-        width: 24,
-        height: 24,
+        width: tailleCase,
+        height: tailleCase,
         direction: BAS,
         model: obstacleHTML
     };
@@ -195,8 +219,8 @@ var recuperePorteNord = function(){
     porteNord = {
         xPos: parseInt(porteNordHTML.style.left.replace("px", "")),
         yPos: parseInt(porteNordHTML.style.top.replace("px", "")),
-        width: 24,
-        height: 24,
+        width: tailleCase,
+        height: tailleCase,
         verouillee: false,
         numObstacle: -1,
         model: porteNord
@@ -209,8 +233,8 @@ var recuperePorteSud = function(){
         speed: 1,
         xPos: parseInt(porteSudHTML.style.left.replace("px", "")),
         yPos: parseInt(porteSudHTML.style.top.replace("px", "")),
-        width: 24,
-        height: 24,
+        width: tailleCase,
+        height: tailleCase,
         verouillee: true,
         numObstacle: -1,
         model: porteSud
@@ -608,7 +632,6 @@ function countTimer() {
 
 zoom = 6;
 var messageGlobal;
-window.onresize = dialogBox;
 document.onload = init();
 var totalSeconds = 3600;//initalisation du timer de début
 var totalSecondsInit = 3600;//initalisation et début du timer 
