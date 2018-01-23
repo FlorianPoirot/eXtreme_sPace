@@ -75,6 +75,7 @@ function init(){
     lastRender = 0;
 
     recuperePersonnage();
+    recupereMurs();
 	window.requestAnimationFrame(loop);
 }
 
@@ -96,12 +97,13 @@ var recupereMurs = function(){
 	nbMurs = mursTabHTML.length;
 	tabMurs = {};
 	for(var i =0; i<nbMurs; i++){
-		recupereMur(mursTab[i]);
+		var mur = recupereMur(mursTab[i]);
+		tabMurs[i] = mur;
 	}
 }
 
 var recupereMur = function(murHTML){
-	mur = {
+	var mur = {
     	xPos: murHTML.style.left,
     	yPos: murHTML.style.top,
     	width: murHTML.style.width,
@@ -109,26 +111,11 @@ var recupereMur = function(murHTML){
     	direction: BAS,
     	model: murHTML
     };
+    return mur;
 }
 
 
 
-
-
-function preparePersonnage(args){
-	if(typeof preparePersonnage.arguments[0]=="undefined"){
-		character.xPos = (Math.floor(Math.random()*(380/5)))*5;
-		character.yPos = 0;
-		charXPosInitial = character.xPos;
-		charYPosInitial = 0;
-	}else{
-		character.xPos = preparePersonnage.arguments[0];
-		character.yPos = preparePersonnage.arguments[1];
-		charXPosInitial = character.xPos;
-		charYPosInitial = character.yPos;
-	}
-	character.direction=BAS;
-}
 
 function affichePersonage(){
 	var source = protege?"img/personnage_up_up_protege.svg":"img/personnage_up_up.svg";
