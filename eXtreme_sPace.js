@@ -242,14 +242,14 @@ function deplacerEnHaut(entite){
 }
 
 function deplacerEnBas(entite){
-    entite.yPos+=entite.yPos+entite.speed>380?0:entite.speed;
+    entite.yPos+=entite.yPos+entite.speed>512?0:entite.speed;
 }
 
 
 
 
 
-var toleranceBrique = 2;
+var toleranceObstacle = 0;
 
 function toucheUnObstacleDeLaGauche(entite){
     var touche=false;
@@ -288,7 +288,7 @@ function toucheUnObstacleDenHaut(entite){
 }
 
 function toucheLObstacleDenHaut(brique, entite){
-    if(leHautDeLEntiteEstEnBasDuBasDeLObstacle(brique, entite)){
+    if(leBasDeLEntiteEstPlusBasQueLeHautDeLObstacle(brique, entite)){
         if (laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle(brique, entite) || laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle(brique, entite)){
             return false
         }else{
@@ -356,35 +356,35 @@ function toucheLObstacleDeLaDroite(brique, entite){
 }
 
 var leHautDeLEntiteEstEnBasDuBasDeLObstacle = function(brique, entite){
-    return entite.yPos>=brique.yPos+brique.height-toleranceBrique;
+    return entite.yPos>=brique.yPos+brique.height-toleranceObstacle;
 }
 
 var LeHautDeLEntiteEstEnHautDuBasDeLObstacle = function(brique, entite){
-    return entite.yPos-entite.speed<brique.yPos+brique.height-toleranceBrique;
+    return entite.yPos-entite.speed<brique.yPos+brique.height-toleranceObstacle;
 }
 
 var leBasDeLEntiteEstEnHautDuHautDeLObstacle = function(brique, entite){
-    return entite.yPos+entite.height<=brique.yPos+toleranceBrique;
+    return entite.yPos+entite.height<=brique.yPos+toleranceObstacle;
 }
 
 var leBasDeLEntiteEstPlusBasQueLeHautDeLObstacle = function (brique, entite){
-    return entite.yPos+entite.height+entite.speed>brique.yPos+toleranceBrique;
+    return entite.yPos+entite.height+entite.speed>brique.yPos+toleranceObstacle;
 }
 
 var laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle = function(brique, entite){
-    return entite.xPos>=brique.xPos+brique.width-toleranceBrique;
+    return entite.xPos>=brique.xPos+brique.width-toleranceObstacle;
 }
 
 var laGaucheDeLEntiteEstAGaucheDeLaDroiteDeLObstacle = function(brique, entite){
-    return entite.xPos-entite.speed<brique.xPos+brique.width-toleranceBrique;
+    return entite.xPos-entite.speed<brique.xPos+brique.width-toleranceObstacle;
 }
 
 var laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle = function(brique, entite){
-    return entite.xPos+entite.width<=brique.xPos+toleranceBrique;
+    return entite.xPos+entite.width<=brique.xPos+toleranceObstacle;
 }
 
 var laDroiteDeLEntiteEstADroiteDeLaGaucheDeLObstacle = function(brique, entite){
-    return entite.xPos+entite.width+entite.speed>brique.xPos+toleranceBrique;
+    return entite.xPos+entite.width+entite.speed>brique.xPos+toleranceObstacle;
 }
 
 
