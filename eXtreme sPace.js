@@ -75,7 +75,7 @@ function init(){
     lastRender = 0;
 
     recuperePersonnage();
-    recupereMurs();
+    recupereObstacles();
 	window.requestAnimationFrame(loop);
 }
 
@@ -92,36 +92,37 @@ var recuperePersonnage = function(){
     };
 }
 
-var recupereMurs = function(){
-	var mursTabHTML = document.getElementsByClassName("wall");
-	nbMurs = mursTabHTML.length;
-	tabMurs = {};
+var recupereObstacles = function(){
+	var obstaclesTabHTML = document.getElementsByClassName("wall");
+	nbMurs = obstaclesTabHTML.length;
+	tabObstacles = {};
 	for(var i =0; i<nbMurs; i++){
-		var mur = recupereMur(mursTab[i]);
-		tabMurs[i] = mur;
+		var mur = recupereObstacle(obstaclesTabHTML[i]);
+		tabObstacles[i] = mur;
 	}
 }
 
-var recupereMur = function(murHTML){
+var recupereObstacle = function(obstacleHTML){
 	var mur = {
-    	xPos: murHTML.style.left,
-    	yPos: murHTML.style.top,
-    	width: murHTML.style.width,
-    	height: murHTML.style.height,
+    	xPos: obstacleHTML.style.left,
+    	yPos: obstacleHTML.style.top,
+    	width: obstacleHTML.style.width,
+    	height: obstacleHTML.style.height,
     	direction: BAS,
-    	model: murHTML
+    	model: obstacleHTML
     };
     return mur;
 }
 
 
 
+var draw = function (argument) {
+	affichePersonage();
+}
 
 function affichePersonage(){
-	var source = protege?"img/personnage_up_up_protege.svg":"img/personnage_up_up.svg";
-	character.model.style.WebkitTransition = "all .1s linear";
 	character.model.style.left = (character.xPos+game_container.offsetLeft);
-	character.model.style.top = (character.yPos+game_container.offsetTop);
+	character.model.style.top = (character.yPos+game_container.offsetTop);/*
 	switch (character.direction){
 		case HAUT:
 			character.model.style.WebkitTransform = "rotate(0deg) scale(1,1)";
@@ -147,59 +148,77 @@ function affichePersonage(){
 		case BD:
 			character.model.style.WebkitTransform = "rotate(135deg) scale(-1,1)";
 			break;
-	}
-	character.model.src = source;
-	character.model.id = "personnage";
+	}*/
 	game_container.appendChild(character.model);
 }
 
 
 
+var update = function (argument) {
+	deplacerLePersonnage();
+}
+
 function deplacerLePersonnage(){
 	if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
-		if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
+		/*if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
 			character.direction = HG;
 		}else if ((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
 			character.direction = BG;
 		} else{
 			character.direction = GAUCHE;
-		}
-		if(!toucheUneBriqueDeLaDroite(character))
+		}*/
+		if(!toucheUnObstacleDeLaDroite(character))
 			deplacerAGauche(character);
 	}
 	if((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
-		if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
+		/*if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
 			character.direction = HD;
 		}else if ((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
 			character.direction = BD;
 		} else{
 			character.direction = DROITE;
-		}
-		if(!toucheUneBriqueDeLaGauche(character))
+		}*/
+		if(!toucheUnObstacleDeLaGauche(character))
 			deplacerADroite(character);
 	}
 	if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
-		if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
+		/*if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
 			character.direction = HG;
 		}else if ((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
 			character.direction = HD;
 		} else{
 			character.direction = HAUT;
-		}
-		if(!toucheUneBriqueDenBas(character))
+		}*/
+		if(!toucheUnObstacleDenBas(character))
 			deplacerEnHaut(character);
 	}
 	if((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
-		if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
+		/*if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
 			character.direction = BG;
 		}else if ((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
 			character.direction = BD;
 		} else{
 			character.direction = BAS;
-		}
-		if(!toucheUneBriqueDenHaut(character))
+		}*/
+		if(!toucheUnObstacleDenHaut(character))
 			deplacerEnBas(character);
 	}
+}
+
+function deplacerAGauche(entite){
+	entite.xPos-=entite.xPos-entite.speed<0?0:entite.speed;
+}
+
+function deplacerADroite(entite){
+	entite.xPos+=entite.xPos+entite.speed>380?0:entite.speed;
+}
+
+function deplacerEnHaut(entite){
+	entite.yPos-=entite.yPos-entite.speed<0?0:entite.speed;
+}
+
+function deplacerEnBas(entite){
+	entite.yPos+=entite.yPos+entite.speed>380?0:entite.speed;
 }
 
 
@@ -208,22 +227,22 @@ function deplacerLePersonnage(){
 
 var toleranceBrique = 2;
 
-function toucheUneBriqueDeLaGauche(entite){
+function toucheUnObstacleDeLaGauche(entite){
 	var touche=false;
 	var i=0;
 	while(i<nbMurs && !touche){
-		touche = touche || toucheLaBriqueDeLaGauche(tabMurs[i], entite);
+		touche = touche || toucheLObstacleDeLaGauche(tabObstacles[i], entite);
 		i++;
 	}
 	return touche;
 }
 
-function toucheLaBriqueDeLaGauche(brique, entite){
-	if(laDroiteDeLEntiteEstADroiteDeLaGaucheDeLaBrique(brique, entite)){
-		if (leBasDeLEntiteEstEnHautDuHautDeLaBrique(brique, entite) || leHautDeLEntiteEstEnBasDuBasDeLaBrique(brique, entite)){
+function toucheLObstacleDeLaGauche(brique, entite){
+	if(laDroiteDeLEntiteEstADroiteDeLaGaucheDeLObstacle(brique, entite)){
+		if (leBasDeLEntiteEstEnHautDuHautDeLObstacle(brique, entite) || leHautDeLEntiteEstEnBasDuBasDeLObstacle(brique, entite)){
 			return false
 		}else{
-			if(laGaucheDeLEntiteEstADroiteDeLaDroiteDeLaBrique(brique, entite)){
+			if(laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle(brique, entite)){
 				return false;
 			}else{
 				return true;
@@ -234,22 +253,22 @@ function toucheLaBriqueDeLaGauche(brique, entite){
 	}
 }
 
-function toucheUneBriqueDenHaut(entite){
+function toucheUnObstacleDenHaut(entite){
 	var touche=false;
 	var i=0;
 	while(i<nbMurs && !touche){
-		touche = touche || toucheLaBriqueDenHaut(tabMurs[i], entite);
+		touche = touche || toucheLObstacleDenHaut(tabObstacles[i], entite);
 		i++;
 	}
 	return touche;
 }
 
-function toucheLaBriqueDenHaut(brique, entite){
-	if(leHautDeLEntiteEstEnBasDuBasDeLaBrique(brique, entite)){
-		if (laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLaBrique(brique, entite) || laGaucheDeLEntiteEstADroiteDeLaDroiteDeLaBrique(brique, entite)){
+function toucheLObstacleDenHaut(brique, entite){
+	if(leHautDeLEntiteEstEnBasDuBasDeLObstacle(brique, entite)){
+		if (laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle(brique, entite) || laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle(brique, entite)){
 			return false
 		}else{
-			if(leHauDeLEntntiteEstPlusBasQueLeBasDeLaBrique(brique, entite)){
+			if(leHauDeLEntntiteEstPlusBasQueLeBasDeLObstacle(brique, entite)){
 				return false;
 			}else{
 				return true;
@@ -260,22 +279,22 @@ function toucheLaBriqueDenHaut(brique, entite){
 	}
 }
 
-function toucheUneBriqueDenBas(entite){
+function toucheUnObstacleDenBas(entite){
 	var touche=false;
 	var i=0;
 	while(i<nbMurs && !touche){
-		touche = touche || toucheLaBriqueDenBas(tabMurs[i], entite);
+		touche = touche || toucheLObstacleDenBas(tabObstacles[i], entite);
 		i++;
 	}
 	return touche;
 }
 
-function toucheLaBriqueDenBas(brique, entite){
-	if(LeHautDeLEntiteEstEnHautDuBasDeLaBrique(brique, entite)){
-		if (laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLaBrique(brique, entite) || laGaucheDeLEntiteEstADroiteDeLaDroiteDeLaBrique(brique, entite)){
+function toucheLObstacleDenBas(brique, entite){
+	if(LeHautDeLEntiteEstEnHautDuBasDeLObstacle(brique, entite)){
+		if (laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle(brique, entite) || laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle(brique, entite)){
 			return false
 		}else{
-			if(leBasDeLEntiteEstEnHautDuHautDeLaBrique(brique, entite)){
+			if(leBasDeLEntiteEstEnHautDuHautDeLObstacle(brique, entite)){
 				return false;
 			}else{
 				return true;
@@ -286,22 +305,22 @@ function toucheLaBriqueDenBas(brique, entite){
 	}
 }
 
-function toucheUneBriqueDeLaDroite(entite){
+function toucheUnObstacleDeLaDroite(entite){
 	var touche=false;
 	var i=0;
 	while(i<nbMurs && !touche){
-		touche = touche || toucheLaBriqueDeLaDroite(tabMurs[i], entite);
+		touche = touche || toucheLObstacleDeLaDroite(tabObstacles[i], entite);
 		i++;
 	}
 	return touche;
 }
 
-function toucheLaBriqueDeLaDroite(brique, entite){
-	if(laGaucheDeLEntiteEstAGaucheDeLaDroiteDeLaBrique(brique, entite)){
-		if (leBasDeLEntiteEstEnHautDuHautDeLaBrique(brique, entite) || leHautDeLEntiteEstEnBasDuBasDeLaBrique(brique, entite)){
+function toucheLObstacleDeLaDroite(brique, entite){
+	if(laGaucheDeLEntiteEstAGaucheDeLaDroiteDeLObstacle(brique, entite)){
+		if (leBasDeLEntiteEstEnHautDuHautDeLObstacle(brique, entite) || leHautDeLEntiteEstEnBasDuBasDeLObstacle(brique, entite)){
 			return false
 		}else{
-			if(laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLaBrique(brique, entite)){
+			if(laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle(brique, entite)){
 				return false;
 			}else{
 				return true;
@@ -312,35 +331,35 @@ function toucheLaBriqueDeLaDroite(brique, entite){
 	}
 }
 
-var leHautDeLEntiteEstEnBasDuBasDeLaBrique = function(brique, entite){
+var leHautDeLEntiteEstEnBasDuBasDeLObstacle = function(brique, entite){
 	return entite.yPos>=brique.yPos+brique.height-toleranceBrique;
 }
 
-var LeHautDeLEntiteEstEnHautDuBasDeLaBrique = function(brique, entite){
+var LeHautDeLEntiteEstEnHautDuBasDeLObstacle = function(brique, entite){
 	return entite.yPos-entite.speed<brique.yPos+brique.height-toleranceBrique;
 }
 
-var leBasDeLEntiteEstEnHautDuHautDeLaBrique = function(brique, entite){
+var leBasDeLEntiteEstEnHautDuHautDeLObstacle = function(brique, entite){
 	return entite.yPos+entite.height<=brique.yPos+toleranceBrique;
 }
 
-var leBasDeLEntiteEstPlusBasQueLeHautDeLaBrique = function (brique, entite){
+var leBasDeLEntiteEstPlusBasQueLeHautDeLObstacle = function (brique, entite){
 	return entite.yPos+entite.height+entite.speed>brique.yPos+toleranceBrique;
 }
 
-var laGaucheDeLEntiteEstADroiteDeLaDroiteDeLaBrique = function(brique, entite){
+var laGaucheDeLEntiteEstADroiteDeLaDroiteDeLObstacle = function(brique, entite){
 	return entite.xPos>=brique.xPos+brique.width-toleranceBrique;
 }
 
-var laGaucheDeLEntiteEstAGaucheDeLaDroiteDeLaBrique = function(brique, entite){
+var laGaucheDeLEntiteEstAGaucheDeLaDroiteDeLObstacle = function(brique, entite){
 	return entite.xPos-entite.speed<brique.xPos+brique.width-toleranceBrique;
 }
 
-var laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLaBrique = function(brique, entite){
+var laDroiteDeLEntiteEstAGaucheDeLaGaucheDeLObstacle = function(brique, entite){
 	return entite.xPos+entite.width<=brique.xPos+toleranceBrique;
 }
 
-var laDroiteDeLEntiteEstADroiteDeLaGaucheDeLaBrique = function(brique, entite){
+var laDroiteDeLEntiteEstADroiteDeLaGaucheDeLObstacle = function(brique, entite){
 	return entite.xPos+entite.width+entite.speed>brique.xPos+toleranceBrique;
 }
 
