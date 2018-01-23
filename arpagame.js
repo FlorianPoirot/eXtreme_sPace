@@ -361,7 +361,7 @@ function loop(timestamp) {
 }
 
 function init(){
-	niveauEnCours=""
+	niveauEnCours="";
 	jeu_commence = false;
 	time = 0;
     lastRender = 0;
