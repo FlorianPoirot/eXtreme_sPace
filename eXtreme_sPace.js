@@ -5,7 +5,7 @@
        var y = character.yPos;
        var dada = character.model.clientX;
        var vava = character.model.clientY;
-       d.innerHTML = 'character :<br>x = ' + x + '<br>y = ' + y +'<br>dada :<br>x = ' + dada + '<br>y = ' + vava;   
+       d.innerHTML = 'character :<br>x = ' + x + '<br>y = ' + y +'<br>dada :<br>x = ' + dada + '<br>y = ' + vava;
     }
 
     function changePositionDiv(evt) {
@@ -95,7 +95,7 @@ function init(){
     jeu_commence = true;
 
     keys = {};
-    document.body.onkeyup = 
+    document.body.onkeyup =
     document.body.onkeydown = function(evt){
         evt = evt || window.evt;
         var charCode = evt.keyCode || evt.which;
@@ -185,16 +185,16 @@ var pointDans = function(entite, point){
 var getPointClique = function(characterMiddleX, characterMiddleY){
     var pointClique = {characterMiddleX, characterMiddleY};
     switch (character.direction){
-        case HAUT: 
+        case HAUT:
             pointClique.characterMiddleY -= tailleCase;
             break;
-        case BAS: 
+        case BAS:
             pointClique.characterMiddleY += tailleCase;
             break;
-        case GAUCHE: 
+        case GAUCHE:
             pointClique.characterMiddleX -= tailleCase;
             break;
-        case DROITE: 
+        case DROITE:
             pointClique.characterMiddleX += tailleCase;
             break;
     }
@@ -368,14 +368,38 @@ function affichePersonage(){
     character.model.style.left = (character.xPos+game_container.offsetLeft)+"px";
     character.model.style.top = (character.yPos+game_container.offsetTop)+"px";
     if(character.direction == BAS){
+      if(keys[DOWNKEY]) {
+        if ( character.model.getAttribute("src") != "resImg/persoAvantMarche.gif") {
+          character.model.src = "resImg/persoAvantMarche.gif";
+        }
+      } else {
         character.model.src = "./resImg/persoAvant.png";
+      }
     }else if(character.direction == HAUT){
+      if(keys[UPKEY]) {
+        if ( character.model.getAttribute("src") != "resImg/persoArriereMarche.gif") {
+          character.model.src = "resImg/persoArriereMarche.gif";
+        }
+      } else {
         character.model.src = "./resImg/persoArriere.png";
+      }
     }else if(character.direction == GAUCHE){
+      if(keys[LEFTKEY]) {
+        if ( character.model.getAttribute("src") != "resImg/persoGaucheMarche.gif") {
+          character.model.src = "resImg/persoGaucheMarche.gif";
+        }
+      } else {
         character.model.src = "./resImg/persoGauche.png";
+      }
     }else if(character.direction == DROITE){
+      if(keys[RIGHTKEY]) {
+        if ( character.model.getAttribute("src") != "resImg/persoDroiteMarche.gif") {
+            character.model.src = "resImg/persoDroiteMarche.gif";
+        }
+      } else {
         character.model.src = "./resImg/persoDroite.png";
-    } 
+      }
+    }
     game_container.appendChild(character.model);
     character.model.id = "personnage";
 }
@@ -706,48 +730,48 @@ function deleteDialogue () {
     window.requestAnimationFrame(loop);
 }
 
-function countTimer() { 
-  //avancement du timer 
+function countTimer() {
+  //avancement du timer
   document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
-  if (totalSeconds > 0) { 
-  --totalSeconds; 
-  var hour = Math.floor(totalSeconds /3600); 
-  var minute = Math.floor((totalSeconds - hour*3600)/60); 
-  var seconds = totalSeconds - (hour*3600 + minute*60); 
-  var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds; 
-  if (hour<10) {echoHour = "0"+hour}  
-  if (minute<10) {echoMinute = "0"+minute} 
-  if (seconds<10) {echoSeconds = "0"+seconds} 
-    /*var timer = document.getElementById("timer"); 
-    //timer.style.border = "solid 2px"; 
+  if (totalSeconds > 0) {
+  --totalSeconds;
+  var hour = Math.floor(totalSeconds /3600);
+  var minute = Math.floor((totalSeconds - hour*3600)/60);
+  var seconds = totalSeconds - (hour*3600 + minute*60);
+  var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds;
+  if (hour<10) {echoHour = "0"+hour}
+  if (minute<10) {echoMinute = "0"+minute}
+  if (seconds<10) {echoSeconds = "0"+seconds}
+    /*var timer = document.getElementById("timer");
+    //timer.style.border = "solid 2px";
     timer.style.zIndex=999;
-    timer.style.fontSize = "20px"; 
+    timer.style.fontSize = "20px";
     timer.style.left = "0px";
     timer.style.top = "0px";
-    timer.style.font = "bold 20px arial,serif"; 
+    timer.style.font = "bold 20px arial,serif";
     timer.innerHTML = echoHour + ":" + echoMinute + ":" + echoSeconds; */
-  } else { 
-    clearInterval(timerVar); 
-    var game = document.getElementById("game"); 
-    var player = document.querySelector('#audioPlayer'); 
-    player.play(); 
- 
-    game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+ 
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
-    "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
-    "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
-    "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>" 
+  } else {
+    clearInterval(timerVar);
+    var game = document.getElementById("game");
+    var player = document.querySelector('#audioPlayer');
+    player.play();
+
+    game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+    "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+
+    "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+    "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+    "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+    "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"
     jeu_commence = false;
-  } 
-} 
+  }
+}
 
 zoom = 6;
 var messageGlobal;
 document.onload = init();
 var totalSeconds = 180;//initalisation du timer de début
-var totalSecondsInit = 180;//initalisation et début du timer 
-var timerVar = setInterval(countTimer, 1000); 
+var totalSecondsInit = 180;//initalisation et début du timer
+var timerVar = setInterval(countTimer, 1000);
 
 
 game_container.style.zoom=zoom;
