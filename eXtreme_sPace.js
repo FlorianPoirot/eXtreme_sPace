@@ -84,6 +84,13 @@ function init(){
     recuperePorteNord();
     recuperePorteSud();
     recupereBibliotheque();
+    recuperePC();
+    recupereCaissonGauche();
+    recupereCaissonDroite();
+    recupereGrandBureau();
+    recuperePetitBreau();
+    recupereLitUn();
+    recupereLitDeux();
 
     jeu_commence = true;
 
@@ -123,29 +130,56 @@ var afficheDialogue = function(objet){
         case bibliotheque:
             dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
             break;
+        case pc:
+            dialogBox("C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            break;
+        case caissonGauche:
+            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
+            break;
+        case caissonDroite:
+            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
+            break;
+        case grandBureau:
+            dialogBox("C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
+            break;
+        case petitBureau:
+            dialogBox("C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
+            break;
+        case litUn:
+            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            break;
+        case litDeux:
+            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            break;
     }
 }
 
 var getObjetClique = function(point){
-    if (pointDansPorteNord(point)){
+    if (pointDans(porteNord, point)){
         return porteNord;
-    }else if(pointDansPorteSud(point)){
+    }else if(pointDans(porteSud, point)){
         return porteSud;
-    }else if(pointDansBibliotheque(point)){
+    }else if(pointDans(bibliotheque, point)){
         return bibliotheque;
+    }else if(pointDans(pc, point)){
+        return pc;
+    }else if(pointDans(caissonGauche, point)){
+        return caissonGauche;
+    }else if(pointDans(caissonDroite, point)){
+        return caissonDroite;
+    }else if(pointDans(grandBureau, point)){
+        return grandBureau;
+    }else if(pointDans(petitBureau, point)){
+        return petitBureau;
+    }else if(pointDans(litUn, point)){
+        return litUn;
+    }else if(pointDans(litDeux, point)){
+        return litDeux;
     }
 }
 
-var pointDansPorteNord = function(point){
-    return point.characterMiddleX<porteNord.xPos+porteNord.width && point.characterMiddleX>porteNord.xPos && point.characterMiddleY<porteNord.yPos+porteNord.height && point.characterMiddleY>porteNord.yPos;
-}
-
-var pointDansPorteSud = function(point){
-    return point.characterMiddleX<porteSud.xPos+porteSud.width && point.characterMiddleX>porteSud.xPos && point.characterMiddleY<porteSud.yPos+porteSud.height && point.characterMiddleY>porteSud.yPos;
-}
-
-var pointDansBibliotheque = function(point){
-    return point.characterMiddleX<bibliotheque.xPos+bibliotheque.width && point.characterMiddleX>bibliotheque.xPos && point.characterMiddleY<bibliotheque.yPos+bibliotheque.height && point.characterMiddleY>bibliotheque.yPos;
+var pointDans = function(entite, point){
+    return point.characterMiddleX<entite.xPos+entite.width && point.characterMiddleX>entite.xPos && point.characterMiddleY<entite.yPos+entite.height && point.characterMiddleY>entite.yPos;
 }
 
 var getPointClique = function(characterMiddleX, characterMiddleY){
@@ -180,6 +214,90 @@ var recuperePersonnage = function(){
     };
 }
 
+var recupereCaissonGauche = function(){
+    var caissonGaucheHTML = document.getElementById("caissonGauche");
+    caissonGauche = {
+        speed: 1,
+        xPos: parseInt(caissonGaucheHTML.style.left.replace("px", "")),
+        yPos: parseInt(caissonGaucheHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: 2*tailleCase,
+        model: caissonGaucheHTML
+    };
+}
+
+var recupereCaissonDroite = function(){
+    var caissonDroiteHTML = document.getElementById("caissonDroite");
+    caissonDroite = {
+        speed: 1,
+        xPos: parseInt(caissonDroiteHTML.style.left.replace("px", "")),
+        yPos: parseInt(caissonDroiteHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: 2*tailleCase,
+        model: caissonDroiteHTML
+    };
+}
+
+var recupereLitUn = function(){
+    var litUnHTML = document.getElementById("lit1");
+    litUn = {
+        speed: 1,
+        xPos: parseInt(litUnHTML.style.left.replace("px", "")),
+        yPos: parseInt(litUnHTML.style.top.replace("px", "")),
+        width: 2*tailleCase,
+        height: tailleCase,
+        model: litUnHTML
+    };
+}
+
+var recupereLitDeux = function(){
+    var litDeuxHTML = document.getElementById("lit2");
+    litDeux = {
+        speed: 1,
+        xPos: parseInt(litDeuxHTML.style.left.replace("px", "")),
+        yPos: parseInt(litDeuxHTML.style.top.replace("px", "")),
+        width: 2*tailleCase,
+        height: tailleCase,
+        model: litDeuxHTML
+    };
+}
+
+var recupereGrandBureau = function(){
+    var grandBureauHTML = document.getElementById("grandBureau");
+    grandBureau = {
+        speed: 1,
+        xPos: parseInt(grandBureauHTML.style.left.replace("px", "")),
+        yPos: parseInt(grandBureauHTML.style.top.replace("px", "")),
+        width: 3*tailleCase,
+        height: tailleCase,
+        model: grandBureauHTML
+    };
+}
+
+var recuperePetitBreau = function(){
+    var petitBureauHTML = document.getElementById("petitBureau");
+    petitBureau = {
+        speed: 1,
+        xPos: parseInt(petitBureauHTML.style.left.replace("px", "")),
+        yPos: parseInt(petitBureauHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: petitBureauHTML
+    };
+}
+
+var recuperePC = function(){
+    var PCHTML = document.getElementById("PC");
+    pc = {
+        speed: 1,
+        xPos: parseInt(PCHTML.style.left.replace("px", "")),
+        yPos: parseInt(PCHTML.style.top.replace("px", "")),
+        width: 3*tailleCase,
+        height: tailleCase,
+        model: PCHTML
+    };
+}
+
 var recupereBibliotheque = function(){
     var bibliothequeHTML = document.getElementById("bibliotheque");
     bibliotheque = {
@@ -187,7 +305,6 @@ var recupereBibliotheque = function(){
         yPos: parseInt(bibliothequeHTML.style.top.replace("px", "")),
         width: 3*tailleCase,
         height: tailleCase,
-        direction: BAS,
         model: bibliothequeHTML
     }
 }
@@ -208,7 +325,6 @@ var recupereObstacle = function(obstacleHTML){
         yPos: parseInt(obstacleHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: tailleCase,
-        direction: BAS,
         model: obstacleHTML
     };
     return mur;
@@ -629,8 +745,8 @@ function countTimer() {
 zoom = 6;
 var messageGlobal;
 document.onload = init();
-var totalSeconds = 3600;//initalisation du timer de début
-var totalSecondsInit = 3600;//initalisation et début du timer 
+var totalSeconds = 180;//initalisation du timer de début
+var totalSecondsInit = 180;//initalisation et début du timer 
 var timerVar = setInterval(countTimer, 1000); 
 
 
