@@ -177,6 +177,19 @@ var draw = function (argument) {
 function affichePersonage(){
     character.model.style.left = (character.xPos+game_container.offsetLeft)+"px";
     character.model.style.top = (character.yPos+game_container.offsetTop)+"px";
+    if(character.direction == BAS){
+        character.model.style.transform = "rotate(0deg)"; 
+        character.model.style.WebkitTransform = "'rotate(0deg)'"; 
+    }else if(character.direction == HAUT){
+        character.model.style.transform = "rotate(180deg)"; 
+        character.model.style.WebkitTransform = "'rotate(180deg)'"; 
+    }else if(character.direction == GAUCHE){
+        character.model.style.transform = "rotate(90deg)"; 
+        character.model.style.WebkitTransform = "'rotate(90deg)'"; 
+    }else if(character.direction == DROITE){
+        character.model.style.transform = "rotate(270deg)"; 
+        character.model.style.WebkitTransform = "'rotate(270deg)'"; 
+    } 
     game_container.appendChild(character.model);
     character.model.id = "personnage";
 }
