@@ -84,6 +84,7 @@ function init(){
     recuperePorteNord();
     recuperePorteSud();
     recupereBibliotheque();
+    recuperePC();
 
     jeu_commence = true;
 
@@ -123,29 +124,26 @@ var afficheDialogue = function(objet){
         case bibliotheque:
             dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
             break;
+        case pc:
+            dialogBox("C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            break;
     }
 }
 
 var getObjetClique = function(point){
-    if (pointDansPorteNord(point)){
+    if (pointDans(porteNord, point)){
         return porteNord;
-    }else if(pointDansPorteSud(point)){
+    }else if(pointDans(porteSud, point)){
         return porteSud;
-    }else if(pointDansBibliotheque(point)){
+    }else if(pointDans(bibliotheque, point)){
         return bibliotheque;
+    }else if(pointDans(pc, point)){
+        return pc;
     }
 }
 
-var pointDansPorteNord = function(point){
-    return point.characterMiddleX<porteNord.xPos+porteNord.width && point.characterMiddleX>porteNord.xPos && point.characterMiddleY<porteNord.yPos+porteNord.height && point.characterMiddleY>porteNord.yPos;
-}
-
-var pointDansPorteSud = function(point){
-    return point.characterMiddleX<porteSud.xPos+porteSud.width && point.characterMiddleX>porteSud.xPos && point.characterMiddleY<porteSud.yPos+porteSud.height && point.characterMiddleY>porteSud.yPos;
-}
-
-var pointDansBibliotheque = function(point){
-    return point.characterMiddleX<bibliotheque.xPos+bibliotheque.width && point.characterMiddleX>bibliotheque.xPos && point.characterMiddleY<bibliotheque.yPos+bibliotheque.height && point.characterMiddleY>bibliotheque.yPos;
+var pointDans = function(entite, point){
+    return point.characterMiddleX<entite.xPos+entite.width && point.characterMiddleX>entite.xPos && point.characterMiddleY<entite.yPos+entite.height && point.characterMiddleY>entite.yPos;
 }
 
 var getPointClique = function(characterMiddleX, characterMiddleY){
@@ -177,6 +175,19 @@ var recuperePersonnage = function(){
         height: parseInt(persoHTML.style.height.replace("px", "")),
         direction: BAS,
         model: persoHTML
+    };
+}
+
+var recuperePC = function(){
+    var PCHTML = document.getElementById("PC");
+    pc = {
+        speed: 1,
+        xPos: parseInt(PCHTML.style.left.replace("px", "")),
+        yPos: parseInt(PCHTML.style.top.replace("px", "")),
+        width: 3*tailleCase,
+        height: tailleCase,
+        direction: BAS,
+        model: PCHTML
     };
 }
 
