@@ -76,8 +76,11 @@ function init(){
     lastRender = 0;
 
     game_container = document.getElementById("game");
+
     recuperePersonnage();
     recupereObstacles();
+    recuperePorteNord();
+    recuperePorteSud();
 
     jeu_commence = true;
 
@@ -137,6 +140,29 @@ var recupereObstacle = function(obstacleHTML){
     return mur;
 }
 
+var recuperePorteNord = function(){
+    var porteNordHTML = document.getElementById("porteNord");
+    porteNord = {
+        xPos: parseInt(porteNordHTML.style.left.replace("px", "")),
+        yPos: parseInt(porteNordHTML.style.top.replace("px", "")),
+        width: 24,
+        height: 24,
+        model: porteNord
+    };
+}
+
+var recuperePorteSud = function(){
+    var porteSudHTML = document.getElementById("porteSud");
+    porteSud = {
+        speed: 1,
+        xPos: parseInt(porteSudHTML.style.left.replace("px", "")),
+        yPos: parseInt(porteSudHTML.style.top.replace("px", "")),
+        width: 24,
+        height: 24,
+        model: porteSud
+    };
+}
+
 
 
 var draw = function (argument) {
@@ -145,33 +171,7 @@ var draw = function (argument) {
 
 function affichePersonage(){
     character.model.style.left = (character.xPos+game_container.offsetLeft)+"px";
-    character.model.style.top = (character.yPos+game_container.offsetTop)+"px";/*
-    switch (character.direction){
-        case HAUT:
-            character.model.style.WebkitTransform = "rotate(0deg) scale(1,1)";
-            break;
-        case BAS:
-            character.model.style.WebkitTransform = "rotate(180deg) scale(-1,1)";
-            break;
-        case GAUCHE:
-            character.model.style.WebkitTransform = " rotate(-90deg) scale(1,1)";
-            break;
-        case DROITE:
-            character.model.style.WebkitTransform = " rotate(90deg) scale(-1,1)";
-            break;
-        case HG:
-            character.model.style.WebkitTransform = "rotate(-45deg) scale(1,1)";
-            break;
-        case HD:
-            character.model.style.WebkitTransform = "rotate(45deg) scale(-1,1)";
-            break;
-        case BG:
-            character.model.style.WebkitTransform = "rotate(-135deg) scale(1,1)";
-            break;
-        case BD:
-            character.model.style.WebkitTransform = "rotate(135deg) scale(-1,1)";
-            break;
-    }*/
+    character.model.style.top = (character.yPos+game_container.offsetTop)+"px";
     game_container.appendChild(character.model);
     character.model.id = "personnage";
 }
@@ -180,52 +180,43 @@ function affichePersonage(){
 
 var update = function (argument) {
     deplacerLePersonnage();
+    detectePorte();
 }
 
 function deplacerLePersonnage(){
     if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
-        /*if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
-            character.direction = HG;
-        }else if ((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
-            character.direction = BG;
-        } else{
-            character.direction = GAUCHE;
-        }*/
+        character.direction = GAUCHE;
         if(!toucheUnObstacleDeLaDroite(character))
             deplacerAGauche(character);
     }
     if((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
-        /*if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
-            character.direction = HD;
-        }else if ((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
-            character.direction = BD;
-        } else{
-            character.direction = DROITE;
-        }*/
+        character.direction = DROITE;
         if(!toucheUnObstacleDeLaGauche(character))
             deplacerADroite(character);
     }
     if((keys[UPKEY] || keys[ZKEY] || keys[WKEY]) && !(keys[DOWNKEY] || keys[SKEY])){
-        /*if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
-            character.direction = HG;
-        }else if ((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
-            character.direction = HD;
-        } else{
-            character.direction = HAUT;
-        }*/
+        character.direction = HAUT;
         if(!toucheUnObstacleDenBas(character))
             deplacerEnHaut(character);
     }
     if((keys[DOWNKEY] || keys[SKEY]) && !(keys[UPKEY] || keys[ZKEY] || keys[WKEY])){
-        /*if((keys[LEFTKEY] || keys[AKEY] || keys[QKEY]) && !(keys[RIGHTKEY] || keys[DKEY])){
-            character.direction = BG;
-        }else if ((keys[RIGHTKEY] || keys[DKEY]) && !(keys[LEFTKEY] || keys[AKEY] || keys[QKEY])){
-            character.direction = BD;
-        } else{
-            character.direction = BAS;
-        }*/
+        character.direction = BAS;
         if(!toucheUnObstacleDenHaut(character))
             deplacerEnBas(character);
+    }
+}
+
+var tolerancePorte = 2;
+var detectePorte = function(){
+    if(collision(character, porteNord, tolerancePorte)){
+        porteNord.model.src = "./resImg/porte_ouverte.gif";
+    }else{
+        porteNord.model.src = "./resImg/porte.png";
+    }
+    if(collision(character, porteSud, tolerancePorte)){
+        porteSud.model.src = "./resImg/porte_ouverte.gif";
+    }else{
+        porteSud.model.src = "./resImg/porte.png";
     }
 }
 
@@ -394,15 +385,31 @@ function deplacerEnBas(entite){
 
 
 function collision(entite1, entite2, tolerance){
-    if (entite1.xPos+entite1.width-tolerance<entite2.xPos)
+    if (laDroiteDeLEntiteUneEstAGaucheDeLaGaucheDeLEntite2(entite1, entite2, tolerance))
         return false;
-    if (entite1.xPos>entite2.xPos+entite2.width-tolerance)
+    if (laGaucheDeLEntiteUneEstADroiteDeLaDroiteDeLEntite2(entite1, entite2, tolerance))
         return false;
-    if (entite1.yPos+entite1.height-tolerance<entite2.yPos)
+    if (leBasDeLEntiteUneEstEnHautDuHautDeLEntite2(entite1, entite2, tolerance))
         return false;
-    if (entite1.yPos>entite2.yPos+entite2.height-tolerance)
+    if (leHautDeLEntiteUneEstEnBasDuBasDeLEntite2(entite1, entite2, tolerance))
         return false;
     return true;
+}
+
+var laDroiteDeLEntiteUneEstAGaucheDeLaGaucheDeLEntite2 = function(entite1, entite2, tolerance){
+    return  entite1.xPos+entite1.width<entite2.xPos+tolerance;
+}
+
+var laGaucheDeLEntiteUneEstADroiteDeLaDroiteDeLEntite2 = function(entite1, entite2, tolerance){
+    return entite1.xPos>entite2.xPos+entite2.width-tolerance;
+}
+
+var leHautDeLEntiteUneEstEnBasDuBasDeLEntite2 = function(entite1, entite2, tolerance){
+    return entite1.yPos>entite2.yPos+entite2.height-tolerance;
+}
+
+var leBasDeLEntiteUneEstEnHautDuHautDeLEntite2 = function(entite1, entite2, tolerance){
+    return entite1.yPos+entite1.height<entite2.yPos+tolerance;
 }
 
 document.onload = init();
