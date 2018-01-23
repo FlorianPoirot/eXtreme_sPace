@@ -56,6 +56,7 @@ var charXPosInitial = 0;
 var charYPosInitial = 0;
 
 var protege=false;
+var dialogBoxShown = false;
 
 
 function loop(timestamp) {
@@ -71,7 +72,6 @@ function loop(timestamp) {
 }
 
 function init(){
-    jeu_commence = false;
     time = 0;
     lastRender = 0;
 
@@ -91,18 +91,68 @@ function init(){
         var charCode = evt.keyCode || evt.which;
         if (charCode != F12KEY && (charCode<96 || charCode >105) && charCode !=8 && charCode != F5KEY)
             evt.preventDefault();
-        if((charCode==ENTERKEY||charCode==SPACEKEY) && evt.type == 'keydown'){
-            if(jeu_commence){
-                jeu_commence=false;
+        if(charCode==SPACEKEY && evt.type == 'keydown'){
+            if (dialogBoxShown){
+                deleteDialogue();
             }else{
-                jeu_commence=true;
-                window.requestAnimationFrame(loop);
+                characterMiddleX = character.xPos + (character.width)/2;
+                characterMiddleY = character.yPos + (character.height)/2;
+                var pointClique = getPointClique(characterMiddleX, characterMiddleY);
+                var objetClique = getObjetClique(pointClique);
+                afficheDialogue(objetClique);
             }
         }
         keys[charCode]= evt.type == 'keydown';
     };
 
+    window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 528*zoom-(window.innerHeight/2)));
     window.requestAnimationFrame(loop);
+}
+
+var afficheDialogue = function(objet){
+    switch(objet){
+        case porteNord:
+            dialogBox("C'est la porte Nord, elle mène au cockpit.");
+            break;
+        case porteSud:
+            dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau.");
+            break;
+    }
+}
+
+var getObjetClique = function(point){
+    if (pointDansPorteNord(point)){
+        return porteNord;
+    }else if(pointDansPorteSud(point)){
+        return porteSud;
+    }
+}
+
+var pointDansPorteNord = function(point){
+    return point.characterMiddleX<porteNord.xPos+porteNord.width && point.characterMiddleX>porteNord.xPos && point.characterMiddleY<porteNord.yPos+porteNord.height && point.characterMiddleY>porteNord.yPos;
+}
+
+var pointDansPorteSud = function(point){
+    return point.characterMiddleX<porteSud.xPos+porteSud.width && point.characterMiddleX>porteSud.xPos && point.characterMiddleY<porteSud.yPos+porteSud.height && point.characterMiddleY>porteSud.yPos;
+}
+
+var getPointClique = function(characterMiddleX, characterMiddleY){
+    var pointClique = {characterMiddleX, characterMiddleY};
+    switch (character.direction){
+        case HAUT: 
+            pointClique.characterMiddleY -= 24;
+            break;
+        case BAS: 
+            pointClique.characterMiddleY += 24;
+            break;
+        case GAUCHE: 
+            pointClique.characterMiddleX -= 24;
+            break;
+        case DROITE: 
+            pointClique.characterMiddleX += 24;
+            break;
+    }
+    return pointClique;
 }
 
 var recuperePersonnage = function(){
@@ -483,12 +533,10 @@ var leBasDeLEntiteUneEstEnHautDuHautDeLEntite2 = function(entite1, entite2, tole
 }
 
 function dialogBox (message) {
-    console.log(message);
     if (typeof message !== 'object') {
         messageGlobal = message;
     }
     deleteDialogue();
-    console.log(document.documentElement.clientWidth);
     var div = document.createElement('p');
     div.setAttribute("id", "dialogBox");
     div.style.zIndex=999;
@@ -506,6 +554,8 @@ function dialogBox (message) {
     div.style.backgroundColor = "white";
     div.innerHTML = messageGlobal;
     document.getElementById('game').appendChild(div);
+    dialogBoxShown = true;
+    jeu_commence = false;
 }
 
 
@@ -515,6 +565,9 @@ function deleteDialogue () {
         element.outerHTML = "";
         delete element;
     }
+    dialogBoxShown = false;
+    jeu_commence = true;
+    window.requestAnimationFrame(loop);
 }
 
 function countTimer() { 
@@ -549,17 +602,17 @@ function countTimer() {
     "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
     "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+ 
     "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>" 
+    jeu_commence = false;
   } 
 } 
 
+zoom = 6;
 var messageGlobal;
 window.onresize = dialogBox;
 document.onload = init();
-var totalSeconds = 300;//initalisation du timer de début
-var totalSecondsInit = 300;//initalisation et début du timer 
+var totalSeconds = 3600;//initalisation du timer de début
+var totalSecondsInit = 3600;//initalisation et début du timer 
 var timerVar = setInterval(countTimer, 1000); 
-dialogBox("palleja : JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP ! JADORE XP !");
 
 
-zoom = 6;
 game_container.style.zoom=zoom;
