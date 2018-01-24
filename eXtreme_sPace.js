@@ -880,7 +880,7 @@ function countTimer() {
             "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-            "<button style=\"position:absolute; zIndex:99999;\" onclick=\"location.reload()\">Recommencer</button>"
+            "<button style=\"position:absolute; margin-left: 70px; margin-top: 10px; zIndex:99999;\" onclick=\"location.reload()\">Recommencer</button>"
             jeu_commence = false;
         }
     } else {
