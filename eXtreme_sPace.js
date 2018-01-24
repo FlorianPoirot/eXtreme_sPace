@@ -122,7 +122,8 @@ function init(){
 }
 
 function testlol () {
-    document.getElementById('game').innerHTML = 
+    document.getElementById("game").innerHTML="";
+    document.body.innerHTML += 
     '<div class="col-xs-8 col-xs-offset-2">'+
     '<marquee id="generique" style=" position: absolute; font-weight: bold;font-variant: small-caps;color: rgb(255, 255, 255);text-align: center; left: 88px;width: 269px;" direction="up" scrollamount="6">'+
       'Réalisé par : Les White Obamas </br>'+
@@ -133,6 +134,24 @@ function testlol () {
       'Florian Poirot </br>'+
       'Johnathan Poirot </br>'+'</br>'+'</br>'+
       'Code Game Jam 2018 </br>'+
+      '</br>'+
+      'Un grand merci à :</br>'+
+      'l\'IUT de Montpellier</br>'+
+      'Francis Garcia</br>'+
+      'Xavier Palleja</br>'+
+      'Antoine Chollet</br>'+
+      'Donald Obama, la mascotte de l\'équipe</br>'+
+      'L\'équipe organisatrice de la Code Game Jam</br>'+
+      'Vous, chers testeurs</br>'+
+      'Fluttershy</br>'+
+      '</br>'+
+      '</br>'+
+      '</br>'+
+      '</br>'+
+      '</br>'+
+      '</br>'+
+      '</br>'+
+      'PS : Elle  est pas mal la musique ;)</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>'+
       //'<img src="resImg/Capture.png"></img>'+      
     '</marquee>'+
     '</div>';
