@@ -150,8 +150,11 @@ function testlol () {
     generique.style.width = document.documentElement.clientWidth/2 + "px";
     generique.style.height = document.documentElement.clientHeight + "px";
 
+    var player = document.querySelector('#audioGenerique');
+    player.play();
+
 }
-testlol();
+
 
 var afficheDialogue = function(objet){
     switch(objet){
@@ -188,7 +191,8 @@ var afficheDialogue = function(objet){
                     dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
                 }
             }else{
-                dialogBox("On rentre  chez nous");
+                dialogBox("On rentre chez nous");
+                testlol();
             }
             break;
         case caissonGauche:
