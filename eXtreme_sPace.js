@@ -890,7 +890,7 @@ function dialogBox (message) {
     div.style.zIndex=999;
     div.style.position="fixed";
     div.setAttribute("class", "col-sm-8 col-sm-offset-2");
-    div.style.height = "15%";
+    div.style.height = "25%";
     div.style.wordWrap = "break-word";
     div.style.bottom = "-10px";
     div.style.left = "0px";
@@ -1092,9 +1092,9 @@ function introduction () {
                     }
                 }
             }
-            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en vérouillage automatique \n"
-                        + "- Etudiant : Oh mince ! J'aurais dû faire des tests ! \n"
-                        + "- IA : Il vous reste "+totalSeconds+" secondes d'oxygene, il faut réparer le réacteur ! \n");
+            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en vérouillage automatique </br>"
+                        + "- Etudiant : Oh mince ! J'aurais dû faire des tests ! </br>"
+                        + "- IA : Il vous reste "+totalSeconds+" secondes d'oxygene, il faut réparer le réacteur !");
             init();
             return false;
         }
