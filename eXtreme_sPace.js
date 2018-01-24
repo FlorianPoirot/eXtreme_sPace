@@ -143,12 +143,16 @@ var afficheDialogue = function(objet){
             dialogBox("Etudiant : C'est une bibliothèque, elle contient des livres de programmation.");
             break;
         case pc:
-            if(porteNord.verouillee) {
-                myModal2.style.display = "block";
-                popupOuverte = true;
-                dialogBox("Etudiant : C'est l'ordinateur central, grâce à lui, je vais pouvoir ouvrir la porte.");
+            if (!gagne){
+                if(porteNord.verouillee) {
+                    myModal2.style.display = "block";
+                    popupOuverte = true;
+                    dialogBox("Etudiant : C'est l'ordinateur central, grâce à lui, je vais pouvoir ouvrir la porte.");
+                }else{
+                    dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
+                }
             }else{
-                dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
+                dialogBox("On rentre  chez nous");
             }
             break;
         case caissonGauche:
