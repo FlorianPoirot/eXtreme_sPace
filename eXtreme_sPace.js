@@ -112,6 +112,38 @@ function init(){
     window.requestAnimationFrame(loop);
 }
 
+function testlol () {
+    document.getElementById('game').innerHTML = 
+    '<div class="col-xs-8 col-xs-offset-2">'+
+    '<marquee id="generique" style=" position: absolute; font-weight: bold;font-variant: small-caps;color: rgb(255, 255, 255);text-align: center; left: 88px;width: 269px;" direction="up" scrollamount="6">'+
+      'Réalisé par : Les White Obamas </br>'+
+      'Paul Aboulinc </br>'+
+      'Alexandre Calvet </br>'+
+      'Sophie Cayuela </br>'+
+      'Christophe Lahaye </br>'+
+      'Florian Poirot </br>'+
+      'Johnathan Poirot </br>'+'</br>'+'</br>'+
+      'Code Game Jam 2018 </br>'+
+      //'<img src="resImg/Capture.png"></img>'+      
+    '</marquee>'+
+    '</div>';
+
+    var generique = document.getElementById('generique');
+    var game = document.getElementById('game');
+
+
+    generique.style.left = (document.documentElement.clientWidth - generique.style.width) /6 + "px";
+
+    game.style.width = document.documentElement.clientWidth/2 + "px";
+    game.style.height = document.documentElement.clientHeight + "px";
+
+
+    generique.style.width = document.documentElement.clientWidth/2 + "px";
+    generique.style.height = document.documentElement.clientHeight + "px";
+
+}
+testlol();
+
 var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
