@@ -41,6 +41,7 @@
         ECHAPKEY    = 27;
         ENTERKEY    = 13
 
+        KKEY        = 75;
 
         HAUT        = 0;
         BAS         = 1;
@@ -108,6 +109,9 @@ function init(){
                     var objetClique = getObjetClique(pointClique);
                     afficheDialogue(objetClique);
                 }
+            }
+            if(charCode==KKEY){
+                totalSeconds=0;
             }
             keys[charCode]= evt.type == 'keydown';
         }
@@ -869,6 +873,9 @@ function countTimer() {
         if (minute<10) {echoMinute = "0"+minute}
         if (seconds<10) {echoSeconds = "0"+seconds}
         } else {
+            jeu_commence = false;
+            document.body.onkeyup =
+            document.body.onkeydown = undefined;
             clearInterval(timerVar);
             var game = document.getElementById("game");
             var player = document.querySelector('#audioPlayer');
@@ -881,7 +888,7 @@ function countTimer() {
             "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<button style=\"position:absolute; zIndex:99999;\" onclick=\"location.reload()\">Recommencer</button>"
-            jeu_commence = false;
+            
         }
     } else {
         totalSeconds = totalSecondsInit;
