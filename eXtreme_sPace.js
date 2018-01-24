@@ -68,7 +68,6 @@ function init(){
     time = 0;
     lastRender = 0;
 
-    game_container = document.getElementById("game");
 
     recuperePersonnage();
     recupereObstacles();
@@ -116,47 +115,47 @@ function init(){
 var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
-            dialogBox("C'est la porte Nord, elle mène au cockpit.");
+            dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
             break;
         case porteSud:
             if(porteSud.verouillee) {
                 modalCustom.style.display = "block";
                 popupOuverte = true;
-                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverouiller.");
+                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverouiller.");
             }else{
-                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverouillée.");
+                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverouillée.");
             }
             break;
         case bibliotheque:
-            dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
+            dialogBox("Etudiant : C'est une bibliothèque, elle contient des livres de programmation.");
             break;
         case pc:
-            dialogBox("C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
             break;
         case caissonGauche:
-            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
+            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
             break;
         case caissonDroite:
-            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
+            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
             break;
         case grandBureau:
-            dialogBox("C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
+            dialogBox("Etudiant : C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
             break;
         case petitBureau:
-            dialogBox("C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
+            dialogBox("Etudiant : C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
             break;
         case litUn:
-            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
         case litDeux:
-            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            dialogBox("Etudiant : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
-        case console:
+        case maConsole:
             if (!gagne){
-                dialogBox("Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
+                dialogBox("Etudiant : Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
                 gagne = true;
             } else {
-                dialogBox("Le réacteur est réparé, nous pouvons rentrer chez nous.");
+                dialogBox("Etudiant : Le réacteur est réparé, nous pouvons rentrer chez nous.");
             }
             break;
     }
@@ -183,8 +182,8 @@ var getObjetClique = function(point){
         return litUn;
     }else if(pointDans(litDeux, point)){
         return litDeux;
-    }else if(pointDans(console, point)){
-        return console;
+    }else if(pointDans(maConsole, point)){
+        return maConsole;
     }
 }
 
@@ -219,14 +218,14 @@ var recuperePersonnage = function(){
         yPos: parseInt(persoHTML.style.top.replace("px", "")),
         width: parseInt(persoHTML.style.width.replace("px", "")),
         height: parseInt(persoHTML.style.height.replace("px", "")),
-        direction: BAS,
+        direction: HAUT,
         model: persoHTML
     };
 }
 
 var recupereConsole = function(){
     var consoleHTML = document.getElementById("console");
-    console = {
+    maConsole = {
         speed: 1,
         xPos: parseInt(consoleHTML.style.left.replace("px", "")),
         yPos: parseInt(consoleHTML.style.top.replace("px", "")),
@@ -866,19 +865,68 @@ $( document ).ready(function() {
     });
 });
 
+function introduction () {
+    var audioIntro = document.querySelector('#audioIntro');
+    audioIntro.play();
+
+    var introTime = 0;
+    var introTimeStamp=0;
+    var introLastRender=0;
+    var endOfIntro=0;
+
+    var mouvementTimeStamp=0;
+    var mouvementLastRender=0;
+    var lastAnimation=0;
+    var audioIntroBoom = document.querySelector('#audioIntroBoom');
+
+    var introLoop = function (introTimeStamp) {
+        if (introTime>=5000){
+            endOfIntro=introTime;
+            audioIntro.pause();
+            audioIntroBoom.play();
+            window.requestAnimationFrame(mouvementLoop);
+            return false;
+        }
+        var progress = introTimeStamp - introLastRender;
+        introTime+=progress;
+        introLastRender = introTimeStamp;
+        window.requestAnimationFrame(introLoop);
+    }
+
+    window.requestAnimationFrame(introLoop);
+
+    var mouvementLoop = function (mouvementTime, mouvementTimeStamp) {
+        console.log(mouvementTime+"\n"+mouvementTimeStamp-endOfIntro+"\n"+mouvementLastRender);
+        if (mouvementTime-endOfIntro>=5000){
+            game_container.style.top="0px";
+            audioIntroBoom.pause();
+            init();
+            return false;
+        }
+        if (mouvementTime>lastAnimation+100) {
+            game_container.style.top=game_container.style.top=="-5px"?"5px":"-5px";
+            lastAnimation = mouvementTime;
+        };
+        var progress = mouvementTimeStamp - endOfIntro - mouvementLastRender;
+        mouvementTime+=progress;
+        mouvementLastRender = mouvementTimeStamp;
+        window.requestAnimationFrame(mouvementLoop);
+    }
+}
+var game_container = document.getElementById("game");
 var gagne = false;
 
 var charXPosInitial = 0;
 var charYPosInitial = 0;
 
 var protege=false;
-var dialogBoxShown = false;
+var dialogBoxShown = false
 
 var tailleCase = 24;
 
 zoom = 6;
 var messageGlobal;
-document.onload = init();
+document.onload = introduction();
 var totalSeconds = 180;//initalisation du timer de début
 var totalSecondsInit = 180;//initalisation et début du timer
 var timerVar = setInterval(countTimer, 1000);
