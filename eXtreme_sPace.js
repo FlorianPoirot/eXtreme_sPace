@@ -876,6 +876,7 @@ function countTimer() {
             jeu_commence = false;
             document.body.onkeyup =
             document.body.onkeydown = undefined;
+            window.scrollTo(0, 0);
             clearInterval(timerVar);
             var game = document.getElementById("game");
             var player = document.querySelector('#audioPlayer');
