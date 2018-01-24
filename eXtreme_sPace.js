@@ -117,7 +117,11 @@ function init(){
 var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
-            dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
+            if(porteNord.verouillee) {
+                dialogBox("Etudiant : C'est la porte Nord, elle est verouillee, peut-être qu'à l'ordinateur central je pourrais trouver un moyen de l'ouvrir.");
+            }else{
+                dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
+            }
             break;
         case porteSud:
             if(porteSud.verouillee) {
@@ -132,7 +136,13 @@ var afficheDialogue = function(objet){
             dialogBox("Etudiant : C'est une bibliothèque, elle contient des livres de programmation.");
             break;
         case pc:
-            dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            if(porteNord.verouillee) {
+                myModal2.style.display = "block";
+                popupOuverte = true;
+                dialogBox("Etudiant : C'est l'ordinateur central, grâce à lui, je vais pouvoir ouvrir la porte.");
+            }else{
+                dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            }
             break;
         case caissonGauche:
             dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
@@ -371,7 +381,7 @@ var recuperePorteNord = function(){
         yPos: parseInt(porteNordHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: tailleCase,
-        verouillee: false,
+        verouillee: true,
         numObstacle: -1,
         model: porteNordHTML
     };
@@ -875,7 +885,6 @@ function countTimer() {
 function resizeBody () {
     document.body.style.width = document.documentElement.clientWidth;
     document.body.style.height = document.documentElement.clientHeight;
-    console.log("test"+document.documentElement.clientWidth);
 }
 
 $( document ).ready(function() {
@@ -891,33 +900,47 @@ $( document ).ready(function() {
                 if(porteSud.verouillee){
                     if(json.resultat){
                         porteSud.verouillee=false;
-                        dialogBox("SUPER !! J'ai déverouillé la porte !!!");
+                        dialogBox("Etudiant : SUPER !! J'ai déverouillé la porte !!!");
                         popupOuverte = false;
                         modalCustom.style.display = "none";
                     }else{
-                        dialogBox("MINCE ! J'ai fait une erreur dans mon code !");
+                        dialogBox("Etudiant : MINCE ! J'ai fait une erreur dans mon code !");
                         popupOuverte = false;
                         modalCustom.style.display = "none";
                     }
                 }
-                //console.log("bonjour");
-                // if (
-                //  (leThis.attr('data-action') == "publie" && json.publie)
-                //  || (leThis.attr('data-action') == "valide" && json.valide)
-                // ) {
-                //  leThis.attr('class', 'btn btn-success'); //change la classe en danger
-                //  leThis.text('Oui').text(); //change la valeur du bouton
-                // } else if (
-                //  (leThis.attr('data-action') == "publie" && ! json.publie)
-                //  || (leThis.attr('data-action') == "valide" && ! json.valide)
-                // ) {
-                //  leThis.attr('class', 'btn btn-danger'); //change la classe en danger
-                //  leThis.text('Non').text();
-                // }
+            },
+            error : function(statut) {}
+        });
+    });
+});
+
+$( document ).ready(function() {
+  $('#machin').click(function(ev) {
+    var leThis = $(this);
+    var leMdp = $('#mdp').val();
+    console.log(leMdp);
+        $.ajax({
+            url : 'admin.php',
+            type : 'POST',
+            data : 'mdp='+ leMdp,
+            dataType : 'json',
+            success : function(json) {
+                if (porteNord.verouillee) {
+                    if (json.resultat) {
+                        porteNord.verouillee=false;
+                        dialogBox("IA : La porte Nord est déverouillée.");
+                        popupOuverte = false;
+                        myModal2.style.display = "none";
+                    }else{
+                        dialogBox("IA : Non, ce n'est pas le bon code.");
+                        popupOuverte = false;
+                        myModal2.style.display = "none";
+                    }
+                }
+                console.log(json);
             },
             error : function(statut) {
-                // leThis.attr('class', 'btn btn-danger'); //change la classe en danger
-                // leThis.text('Error').text();
             }
         });
     });
@@ -954,7 +977,6 @@ function introduction () {
     window.requestAnimationFrame(introLoop);
 
     var mouvementLoop = function (mouvementTime, mouvementTimeStamp) {
-        console.log(mouvementTime+"\n"+mouvementTimeStamp-endOfIntro+"\n"+mouvementLastRender);
         if (mouvementTime-endOfIntro>=5000){
             game_container.style.top="0px";
             audioIntroBoom.pause();
