@@ -121,7 +121,7 @@ var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
             if(porteNord.verouillee) {
-                dialogBox("Etudiant : C'est la porte Nord, elle est verouillee, peut-être qu'à l'ordinateur central je pourrais trouver un moyen de l'ouvrir.");
+                dialogBox("Etudiant : C'est la porte Nord, elle est verRouillée, peut-être qu'à l'ordinateur central, je pourrais trouver un moyen de l'ouvrir.");
             }else{
                 dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
             }
@@ -155,13 +155,13 @@ var afficheDialogue = function(objet){
             dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
             break;
         case caissonDroite:
-            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
+            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à l'intérieur.");
             break;
         case grandBureau:
             dialogBox("Etudiant : C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
             break;
         case petitBureau:
-            dialogBox("Etudiant : C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
+            dialogBox("Etudiant : C'est un petit bureau, le compte en banque en Suisse de M.Garcia est écrit sur un des papiers.");
             break;
         case litUn:
             dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
@@ -188,7 +188,7 @@ var afficheDialogue = function(objet){
             }else{
                 myModal3.style.display = "block";
                 popupOuverte = true;
-                dialogBox("M.Palleja : Un élève m'a  donner ce code, tu peux me dire ce qu'il fait ? Il sent les poubelles pas sorties depuis au moins deux mois.");
+                dialogBox("M.Palleja : Un élève m'a donné ce code, tu peux me dire ce qu'il fait ? Il sent les poubelles pas sorties depuis au moins deux mois.");
             }
           break;
         case maConsole:
