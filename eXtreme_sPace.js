@@ -192,7 +192,7 @@ var afficheDialogue = function(objet){
                 xp.model.src="resImg/xpAvant.png";
             }
             if(enigmePallejaResolue){
-                dialogBox("M.Palleja : J'adore l'eXtreme Programming <3");
+                dialogBox("M.Palleja : J'adore l'eXtreme Programming, normal, j'ai aidé à le créer ! ");
             }else{
                 myModal3.style.display = "block";
                 popupOuverte = true;
@@ -876,6 +876,7 @@ function countTimer() {
             jeu_commence = false;
             document.body.onkeyup =
             document.body.onkeydown = undefined;
+            window.scrollTo(0, 0);
             clearInterval(timerVar);
             var game = document.getElementById("game");
             var player = document.querySelector('#audioPlayer');
@@ -1003,6 +1004,7 @@ function introduction () {
     var audioIntroBoom = document.querySelector('#audioIntroBoom');
 
     var introLoop = function (introTimeStamp) {
+        window.scrollTo(0, 0);
         if (introTime>=5000){
             endOfIntro=introTime;
             audioIntro.pause();
@@ -1019,6 +1021,7 @@ function introduction () {
     window.requestAnimationFrame(introLoop);
 
     var mouvementLoop = function (mouvementTime, mouvementTimeStamp) {
+        window.scrollTo(0, 0);
         if (mouvementTime-endOfIntro>=5000){
             game_container.style.top="0px";
             audioIntroBoom.pause();
