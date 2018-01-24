@@ -5,7 +5,7 @@ if(isset($_POST['code'])){
 
 	try {
 		eval($code);
-		$uneVariable = deverouillage();
+		$uneVariable = deverrouillage();
 		if($uneVariable == 'ACDC'){
 			$tab = array('resultat' => true);
 		}else{
@@ -18,7 +18,7 @@ if(isset($_POST['code'])){
 }
 
 /*
-function deverouillage(){
+function deverrouillage(){
 	$codecrypt="c4b0318bd5d514c92276e5cb55ce15359ce66579"; // A donner dans l'enoncé de l'énigme
 	$tabdequatrelettre=array('a','b','c','d','A','B','C','D');
 	foreach ($tabdequatrelettre as $value) {
