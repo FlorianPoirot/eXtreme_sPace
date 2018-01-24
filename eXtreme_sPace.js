@@ -82,6 +82,8 @@ function init(){
     recupereLitUn();
     recupereLitDeux();
     recupereConsole();
+    recupereBaril();
+    recupereFluttershy();
 
     jeu_commence = true;
 
@@ -150,6 +152,14 @@ var afficheDialogue = function(objet){
         case litDeux:
             dialogBox("Etudiant : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
+        case baril:
+            if(fluttershy.model.style.visibility=="hidden") {
+                fluttershy.model.style.visibility = "";
+                dialogBox("Vous trouvez Fluttershy qui était cachée dans ce baril.");
+            } else{
+                dialogBox("Fluttershy: ...");
+            }
+            break;
         case maConsole:
             if (!gagne){
                 dialogBox("Etudiant : Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
@@ -182,6 +192,8 @@ var getObjetClique = function(point){
         return litUn;
     }else if(pointDans(litDeux, point)){
         return litDeux;
+    }else if(pointDans(baril, point)){
+        return baril;
     }else if(pointDans(maConsole, point)){
         return maConsole;
     }
@@ -361,7 +373,7 @@ var recuperePorteNord = function(){
         height: tailleCase,
         verouillee: false,
         numObstacle: -1,
-        model: porteNord
+        model: porteNordHTML
     };
 }
 
@@ -375,7 +387,31 @@ var recuperePorteSud = function(){
         height: tailleCase,
         verouillee: true,
         numObstacle: -1,
-        model: porteSud
+        model: porteSudHTML
+    };
+}
+
+var recupereBaril = function(){
+    var barilHTML = document.getElementById("baril");
+    baril = {
+        speed: 1,
+        xPos: parseInt(barilHTML.style.left.replace("px", "")),
+        yPos: parseInt(barilHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: barilHTML
+    };
+}
+
+var recupereFluttershy = function(){
+    var fluttershyHTML = document.getElementById("fluttershy");
+    fluttershy = {
+        speed: 1,
+        xPos: parseInt(fluttershy.style.left.replace("px", "")),
+        yPos: parseInt(fluttershy.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: fluttershyHTML
     };
 }
 
@@ -457,6 +493,28 @@ var updatePorteNord = function (){
             }
             nbObstacles -=1;
             porteNord.numObstacle=-1;
+        }
+    }
+}
+
+var updatePorteSud = function (){
+    if(porteSud.verouillee){
+        if (tabObstacles[porteSud.numObstacle] == undefined) {
+            porteSud.model.className = "obstacle";
+            porteSud.numObstacle = nbObstacles;
+            tabObstacles[nbObstacles] = porteSud;
+            nbObstacles ++;
+        }
+    }else{
+        porteSud.model.className = "";
+        if(tabObstacles[porteSud.numObstacle] != undefined){
+            delete tabObstacles[porteSud.numObstacle];
+            if(porteNord.numObstacle>porteSud.numObstacle && porteSud.numObstacle!=-1){
+                porteNord.numObstacle = porteSud.numObstacle;
+                tabObstacles[porteNord.numObstacle] = porteNord;
+            }
+            nbObstacles -=1;
+            porteSud.numObstacle=-1;
         }
     }
 }
