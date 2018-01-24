@@ -70,6 +70,7 @@ function init(){
 
 
     recuperePersonnage();
+    recupererXP();
     recupereObstacles();
     recuperePorteNord();
     recuperePorteSud();
@@ -123,9 +124,9 @@ var afficheDialogue = function(objet){
             if(porteSud.verouillee) {
                 modalCustom.style.display = "block";
                 popupOuverte = true;
-                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverouiller.");
+                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverrouiller.");
             }else{
-                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverouillée.");
+                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverrouillée.");
             }
             break;
         case bibliotheque:
@@ -156,10 +157,18 @@ var afficheDialogue = function(objet){
             if(fluttershy.model.style.visibility=="hidden") {
                 fluttershy.model.style.visibility = "";
                 dialogBox("Vous trouvez Fluttershy qui était cachée dans ce baril.");
-            } else{
-                dialogBox("Fluttershy: ...");
+            }else{
+                dialogBox("Fluttershy : ...");
             }
             break;
+        case xp:
+          if (character.direction==DROITE) {
+            xp.model.src="resImg/xpGauche.png";
+          } else {
+            xp.model.src="resImg/xpAvant.png";
+          }
+          dialogBox("Xavier Palleja : J'adore l'eXtreme Programming <3");
+          break;
         case maConsole:
             if (!gagne){
                 dialogBox("Etudiant : Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
@@ -194,6 +203,8 @@ var getObjetClique = function(point){
         return litDeux;
     }else if(pointDans(baril, point)){
         return baril;
+    }else if(pointDans(xp, point)){
+        return xp;
     }else if(pointDans(maConsole, point)){
         return maConsole;
     }
@@ -207,16 +218,16 @@ var getPointClique = function(characterMiddleX, characterMiddleY){
     var pointClique = {characterMiddleX, characterMiddleY};
     switch (character.direction){
         case HAUT:
-            pointClique.characterMiddleY -= tailleCase;
+            pointClique.characterMiddleY -= tailleCase-tailleCase/3;
             break;
         case BAS:
-            pointClique.characterMiddleY += tailleCase;
+            pointClique.characterMiddleY += tailleCase-tailleCase/3;
             break;
         case GAUCHE:
-            pointClique.characterMiddleX -= tailleCase;
+            pointClique.characterMiddleX -= tailleCase-tailleCase/3;
             break;
         case DROITE:
-            pointClique.characterMiddleX += tailleCase;
+            pointClique.characterMiddleX += tailleCase-tailleCase/3;
             break;
     }
     return pointClique;
@@ -232,6 +243,18 @@ var recuperePersonnage = function(){
         height: parseInt(persoHTML.style.height.replace("px", "")),
         direction: HAUT,
         model: persoHTML
+    };
+}
+
+var recupererXP = function(){
+    var xpHTML = document.getElementById("xp");
+    xp = {
+        speed: 1,
+        xPos: parseInt(xpHTML.style.left.replace("px", "")),
+        yPos: parseInt(xpHTML.style.top.replace("px", "")),
+        width: 16,
+        height: 18,
+        model: xpHTML
     };
 }
 
