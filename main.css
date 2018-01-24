@@ -42,36 +42,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .modalCustom {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -80,6 +50,8 @@
     margin-bottom: 10px;
     left: 0;
     top: 0;
+    
+  font-size: 2em;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
@@ -89,6 +61,8 @@
 
 .modalCustom textarea{
   width: 100%;
+  background: black;
+  color: green;
 }
 
 /* Modal Content */
@@ -113,4 +87,11 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+#dialogBox {
+  font-size:  0.4em !important;
+  overflow: scroll;
+  text-align: justify;
+  text-justify: inter-word !important;
 }
