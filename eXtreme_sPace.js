@@ -125,7 +125,7 @@ function testlol () {
     document.getElementById("game").innerHTML="";
     document.body.innerHTML += 
     '<div class="col-xs-8 col-xs-offset-2">'+
-    '<marquee id="generique" style=" position: absolute; font-weight: bold;font-variant: small-caps;color: rgb(255, 255, 255);text-align: center; left: 88px;width: 269px;" direction="up" scrollamount="6">'+
+    '<marquee id="generique" style=" position: absolute;font-size: 2em; font-weight: bold;font-variant: small-caps;color: rgb(255, 255, 255);text-align: center; left: 88px;width: 269px;" direction="up" scrollamount="3">'+
       'Réalisé par : Les White Obamas </br>'+
       'Paul Aboulinc </br>'+
       'Alexandre Calvet </br>'+
