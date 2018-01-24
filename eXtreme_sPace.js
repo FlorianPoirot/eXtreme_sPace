@@ -122,6 +122,8 @@ function init(){
 }
 
 function testlol () {
+    document.body.onkeyup =
+    document.body.onkeydown = undefined;
     document.getElementById("game").innerHTML="";
     document.body.innerHTML += 
     '<div class="col-xs-8 col-xs-offset-2">'+
