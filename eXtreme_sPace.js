@@ -41,6 +41,7 @@
         ECHAPKEY    = 27;
         ENTERKEY    = 13
 
+        KKEY        = 75;
 
         HAUT        = 0;
         BAS         = 1;
@@ -65,12 +66,13 @@ function loop(timestamp) {
 }
 
 function init(){
+    timerVar = setInterval(countTimer, 1000);
     time = 0;
     lastRender = 0;
 
-    game_container = document.getElementById("game");
 
     recuperePersonnage();
+    recupererXP();
     recupereObstacles();
     recuperePorteNord();
     recuperePorteSud();
@@ -82,6 +84,9 @@ function init(){
     recuperePetitBreau();
     recupereLitUn();
     recupereLitDeux();
+    recupereConsole();
+    recupereBaril();
+    recupereFluttershy();
 
     jeu_commence = true;
 
@@ -96,6 +101,7 @@ function init(){
             if(charCode==SPACEKEY && evt.type == 'keydown'){
                 if (dialogBoxShown){
                     deleteDialogue();
+                    window.requestAnimationFrame(loop);
                 }else{
                     characterMiddleX = character.xPos + (character.width)/2;
                     characterMiddleY = character.yPos + (character.height)/2;
@@ -104,12 +110,15 @@ function init(){
                     afficheDialogue(objetClique);
                 }
             }
+            if(charCode==KKEY){
+                totalSeconds=0;
+            }
             keys[charCode]= evt.type == 'keydown';
         }
     };
 
     window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 528*zoom-(window.innerHeight/2)));
-    window.requestAnimationFrame(loop);
+    //window.requestAnimationFrame(loop);
 }
 
 function testlol () {
@@ -147,40 +156,88 @@ testlol();
 var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
-            dialogBox("C'est la porte Nord, elle mène au cockpit.");
+            if(porteNord.verouillee) {
+                dialogBox("Etudiant : C'est la porte Nord, elle est verrouillée, peut-être qu'à l'ordinateur central, je pourrais trouver un moyen de l'ouvrir.");
+            }else{
+                dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
+            }
             break;
         case porteSud:
-            if(porteSud.verouillee) {
-                modalCustom.style.display = "block";
-                popupOuverte = true;
-                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverouiller.");
+            if(enigmePallejaResolue){
+                if(porteSud.verouillee) {
+                    modalCustom.style.display = "block";
+                    popupOuverte = true;
+                    dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverrouiller.");
+                }else{
+                    dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverrouillée.");
+                }
             }else{
-                dialogBox("C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverouillée.");
+                dialogBox("IA : M.Palleja te recherche, tu ferais mieux d'aller le voir");
             }
             break;
         case bibliotheque:
-            dialogBox("C'est une bibliothèque, elle contient des livres de programmation.");
+            dialogBox("Etudiant : C'est une bibliothèque, elle contient des livres de programmation.");
             break;
         case pc:
-            dialogBox("C'est l'ordinateur central, il permet de piloter le vaisseau.");
+            if (!gagne){
+                if(porteNord.verouillee) {
+                    myModal2.style.display = "block";
+                    popupOuverte = true;
+                    dialogBox("Etudiant : C'est l'ordinateur central, grâce à lui, je vais pouvoir ouvrir la porte.");
+                }else{
+                    dialogBox("Etudiant : C'est l'ordinateur central, il permet de piloter le vaisseau.");
+                }
+            }else{
+                dialogBox("On rentre  chez nous");
+            }
             break;
         case caissonGauche:
-            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
+            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité, mais le temps m'est compté. Je n'ai pas de temps de me reposer.");
             break;
         case caissonDroite:
-            dialogBox("Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à  l'intérieur.");
+            dialogBox("Etudiant : Il s'agit d'un caisson de confinement pour voyager en sécurité. Il est fermé,  M.Garcia est sans doute à l'intérieur.");
             break;
         case grandBureau:
-            dialogBox("C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
+            dialogBox("Etudiant : C'est un grand bureau, M.Palleja s'en sert pour lire son livre favori : \"Coder Proprement\".");
             break;
         case petitBureau:
-            dialogBox("C'est un petit bureau, le compte en banque en Suisse de M.Garcia est ecrit sur un des papiers.");
+            dialogBox("Etudiant : C'est un petit bureau, le compte en banque en Suisse de M.Garcia est écrit sur un des papiers.");
             break;
         case litUn:
-            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
         case litDeux:
-            dialogBox("Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            break;
+        case baril:
+            if(fluttershy.model.style.visibility=="hidden") {
+                fluttershy.model.style.visibility = "";
+                dialogBox("Vous trouvez Fluttershy qui était cachée dans ce baril.");
+            }else{
+                dialogBox("Fluttershy : ...");
+            }
+            break;
+        case xp:
+            if (character.direction==DROITE) {
+                xp.model.src="resImg/xpGauche.png";
+            } else {
+                xp.model.src="resImg/xpAvant.png";
+            }
+            if(enigmePallejaResolue){
+                dialogBox("M.Palleja : J'adore l'eXtreme Programming, normal, j'ai aidé à le créer ! ");
+            }else{
+                myModal3.style.display = "block";
+                popupOuverte = true;
+                dialogBox("M.Palleja : Un élève m'a donné ce code, tu peux me dire ce qu'il fait ? Il sent les poubelles pas sorties depuis au moins deux mois.");
+            }
+          break;
+        case maConsole:
+            if (!gagne){
+                dialogBox("Etudiant : Oui !!! j'ai enfin pu réparer le réacteur, on va pouvoir enfin rentrer chez nous, nous sommes sauvés !!!!");
+                gagne = true;
+            } else {
+                dialogBox("Etudiant : Le réacteur est réparé, nous pouvons rentrer chez nous.");
+            }
             break;
     }
 }
@@ -206,6 +263,12 @@ var getObjetClique = function(point){
         return litUn;
     }else if(pointDans(litDeux, point)){
         return litDeux;
+    }else if(pointDans(baril, point)){
+        return baril;
+    }else if(pointDans(xp, point)){
+        return xp;
+    }else if(pointDans(maConsole, point)){
+        return maConsole;
     }
 }
 
@@ -217,16 +280,16 @@ var getPointClique = function(characterMiddleX, characterMiddleY){
     var pointClique = {characterMiddleX, characterMiddleY};
     switch (character.direction){
         case HAUT:
-            pointClique.characterMiddleY -= tailleCase;
+            pointClique.characterMiddleY -= tailleCase-tailleCase/3;
             break;
         case BAS:
-            pointClique.characterMiddleY += tailleCase;
+            pointClique.characterMiddleY += tailleCase-tailleCase/3;
             break;
         case GAUCHE:
-            pointClique.characterMiddleX -= tailleCase;
+            pointClique.characterMiddleX -= tailleCase-tailleCase/3;
             break;
         case DROITE:
-            pointClique.characterMiddleX += tailleCase;
+            pointClique.characterMiddleX += tailleCase-tailleCase/3;
             break;
     }
     return pointClique;
@@ -240,8 +303,33 @@ var recuperePersonnage = function(){
         yPos: parseInt(persoHTML.style.top.replace("px", "")),
         width: parseInt(persoHTML.style.width.replace("px", "")),
         height: parseInt(persoHTML.style.height.replace("px", "")),
-        direction: BAS,
+        direction: HAUT,
         model: persoHTML
+    };
+}
+
+var recupererXP = function(){
+    var xpHTML = document.getElementById("xp");
+    xp = {
+        speed: 1,
+        xPos: parseInt(xpHTML.style.left.replace("px", "")),
+        yPos: parseInt(xpHTML.style.top.replace("px", "")),
+        width: 16,
+        height: 18,
+        model: xpHTML
+    };
+}
+
+var recupereConsole = function(){
+    var consoleHTML = document.getElementById("console");
+    maConsole = {
+        speed: 1,
+        xPos: parseInt(consoleHTML.style.left.replace("px", "")),
+        yPos: parseInt(consoleHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        direction: BAS,
+        model: consoleHTML
     };
 }
 
@@ -368,9 +456,9 @@ var recuperePorteNord = function(){
         yPos: parseInt(porteNordHTML.style.top.replace("px", "")),
         width: tailleCase,
         height: tailleCase,
-        verouillee: false,
+        verouillee: true,
         numObstacle: -1,
-        model: porteNord
+        model: porteNordHTML
     };
 }
 
@@ -384,7 +472,31 @@ var recuperePorteSud = function(){
         height: tailleCase,
         verouillee: true,
         numObstacle: -1,
-        model: porteSud
+        model: porteSudHTML
+    };
+}
+
+var recupereBaril = function(){
+    var barilHTML = document.getElementById("baril");
+    baril = {
+        speed: 1,
+        xPos: parseInt(barilHTML.style.left.replace("px", "")),
+        yPos: parseInt(barilHTML.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: barilHTML
+    };
+}
+
+var recupereFluttershy = function(){
+    var fluttershyHTML = document.getElementById("fluttershy");
+    fluttershy = {
+        speed: 1,
+        xPos: parseInt(fluttershy.style.left.replace("px", "")),
+        yPos: parseInt(fluttershy.style.top.replace("px", "")),
+        width: tailleCase,
+        height: tailleCase,
+        model: fluttershyHTML
     };
 }
 
@@ -466,6 +578,28 @@ var updatePorteNord = function (){
             }
             nbObstacles -=1;
             porteNord.numObstacle=-1;
+        }
+    }
+}
+
+var updatePorteSud = function (){
+    if(porteSud.verouillee){
+        if (tabObstacles[porteSud.numObstacle] == undefined) {
+            porteSud.model.className = "obstacle";
+            porteSud.numObstacle = nbObstacles;
+            tabObstacles[nbObstacles] = porteSud;
+            nbObstacles ++;
+        }
+    }else{
+        porteSud.model.className = "";
+        if(tabObstacles[porteSud.numObstacle] != undefined){
+            delete tabObstacles[porteSud.numObstacle];
+            if(porteNord.numObstacle>porteSud.numObstacle && porteSud.numObstacle!=-1){
+                porteNord.numObstacle = porteSud.numObstacle;
+                tabObstacles[porteNord.numObstacle] = porteNord;
+            }
+            nbObstacles -=1;
+            porteSud.numObstacle=-1;
         }
     }
 }
@@ -733,9 +867,6 @@ function dialogBox (message) {
     div.style.zIndex=999;
     div.style.position="fixed";
     div.setAttribute("class", "col-sm-8 col-sm-offset-2");
-    //div.style.width = document.documentElement.clientWidth/2+"px";
-    //div.style.top = (document.documentElement.clientHeight)+"px";
-    //div.style.left = document.documentElement.clientWidth/4+"px";
     div.style.height = "15%";
     div.style.wordWrap = "break-word";
     div.style.bottom = "-10px";
@@ -758,71 +889,48 @@ function deleteDialogue () {
     }
     dialogBoxShown = false;
     jeu_commence = true;
-    window.requestAnimationFrame(loop);
 }
 
 function countTimer() {
-  //avancement du timer
-  document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
-  if (totalSeconds > 0) {
-  --totalSeconds;
-  var hour = Math.floor(totalSeconds /3600);
-  var minute = Math.floor((totalSeconds - hour*3600)/60);
-  var seconds = totalSeconds - (hour*3600 + minute*60);
-  var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds;
-  if (hour<10) {echoHour = "0"+hour}
-  if (minute<10) {echoMinute = "0"+minute}
-  if (seconds<10) {echoSeconds = "0"+seconds}
-    /*var timer = document.getElementById("timer");
-    //timer.style.border = "solid 2px";
-    timer.style.zIndex=999;
-    timer.style.fontSize = "20px";
-    timer.style.left = "0px";
-    timer.style.top = "0px";
-    timer.style.font = "bold 20px arial,serif";
-    timer.innerHTML = echoHour + ":" + echoMinute + ":" + echoSeconds; */
-  } else {
-    clearInterval(timerVar);
-    var game = document.getElementById("game");
-    var player = document.querySelector('#audioPlayer');
-    player.play();
+    //avancement du timer
+    document.getElementById("pourcentageVie").style.width = (totalSeconds*100)/totalSecondsInit+"%";
+    if (!gagne){
+        if (totalSeconds > 0) {
+        --totalSeconds;
+        var hour = Math.floor(totalSeconds /3600);
+        var minute = Math.floor((totalSeconds - hour*3600)/60);
+        var seconds = totalSeconds - (hour*3600 + minute*60);
+        var echoHour = hour; var echoMinute = minute; var echoSeconds = seconds;
+        if (hour<10) {echoHour = "0"+hour}
+        if (minute<10) {echoMinute = "0"+minute}
+        if (seconds<10) {echoSeconds = "0"+seconds}
+        } else {
+            jeu_commence = false;
+            document.body.onkeyup =
+            document.body.onkeydown = undefined;
+            window.scrollTo(0, 0);
+            clearInterval(timerVar);
+            var game = document.getElementById("game");
+            var player = document.querySelector('#audioPlayer');
+            player.play();
 
-    game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-    "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"
-    jeu_commence = false;
-  }
+            game.innerHTML = "<div style=\"position:absolute;margin-left: 20px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 60px;margin-top:40;\"><img  src=\"resImg/boom2.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<button style=\"position:absolute; margin-left: 70px; margin-top: 10px; zIndex:99999;\" onclick=\"location.reload()\">Recommencer</button>"
+            jeu_commence = false;
+        }
+    } else {
+        totalSeconds = totalSecondsInit;
+    }
 }
-
-/*function popUp (x,y) {
-    popupOuverte = true;
-    var div = document.createElement('div');
-    div.style.zIndex=999;
-    div.style.position="absolute";
-    div.style.top = x+"px";
-    div.style.left = y+"px";
-    div.style.fontWeight = "bold";
-    div.innerHTML ='<div class="row col-sm-8 col-sm-offset-2 popup-brutforce" id="gamePopUp">'+
-                        '<div class="form-group">'+
-                            '<label for="exampleInputEmail1">Code à remplir : </label>'+
-                            '<p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">\'c4b0318bd5d514c92276e5cb55ce15359ce66579\' codé en sha1. </span> </p>'+
-                            '<p style="color:red;"><b>Le nom de la fonction devra impérativement s\'appeler : deverouillage() </b></p>'+
-                        '</div>'+
-                        '<div class="form-group">'+
-                          '<textarea name="code" rows="8" id="code"></textarea>'+
-                        '</div>'+
-                        '<button id="truc" class="btn btn-default pull-right">Envoyé</button>'+
-                    '</div>';
-    document.body.appendChild(div);
-}*/
 
 function resizeBody () {
     document.body.style.width = document.documentElement.clientWidth;
     document.body.style.height = document.documentElement.clientHeight;
-    console.log("test"+document.documentElement.clientWidth);
 }
 
 $( document ).ready(function() {
@@ -835,58 +943,173 @@ $( document ).ready(function() {
             data : 'code='+ leCode,
             dataType : 'json',
             success : function(json) {
-                console.log(json);
                 if(porteSud.verouillee){
                     if(json.resultat){
-                        console.log("DOGE !!!");
                         porteSud.verouillee=false;
-                        dialogBox("SUPER !! J'ai déverouillé la porte !!!");
+                        dialogBox("Etudiant : SUPER !! J'ai déverouillé la porte !!!");
                         popupOuverte = false;
                         modalCustom.style.display = "none";
                     }else{
-                        dialogBox("MINCE ! J'ai fait une erreur dans mon code !");
+                        dialogBox("Etudiant : MINCE ! J'ai fait une erreur dans mon code !");
+                        popupOuverte = false;
+                        modalCustom.style.display = "none";
                     }
                 }
-                //console.log("bonjour");
-                // if (
-                //  (leThis.attr('data-action') == "publie" && json.publie)
-                //  || (leThis.attr('data-action') == "valide" && json.valide)
-                // ) {
-                //  leThis.attr('class', 'btn btn-success'); //change la classe en danger
-                //  leThis.text('Oui').text(); //change la valeur du bouton
-                // } else if (
-                //  (leThis.attr('data-action') == "publie" && ! json.publie)
-                //  || (leThis.attr('data-action') == "valide" && ! json.valide)
-                // ) {
-                //  leThis.attr('class', 'btn btn-danger'); //change la classe en danger
-                //  leThis.text('Non').text();
-                // }
+            },
+            error : function(statut) {}
+        });
+    });
+});
+
+$( document ).ready(function() {
+  $('#machin').click(function(ev) {
+    var leThis = $(this);
+    var leMdp = $('#mdp').val();
+    console.log(leMdp);
+        $.ajax({
+            url : 'admin.php',
+            type : 'POST',
+            data : 'mdp='+ leMdp,
+            dataType : 'json',
+            success : function(json) {
+                if (porteNord.verouillee) {
+                    if (json.resultat) {
+                        porteNord.verouillee=false;
+                        dialogBox("IA : La porte Nord est déverouillée.");
+                        popupOuverte = false;
+                        myModal2.style.display = "none";
+                    }else{
+                        dialogBox("IA : Non, ce n'est pas le bon code.");
+                        popupOuverte = false;
+                        myModal2.style.display = "none";
+                    }
+                }
+                console.log(json);
             },
             error : function(statut) {
-                // leThis.attr('class', 'btn btn-danger'); //change la classe en danger
-                // leThis.text('Error').text();
             }
         });
     });
 });
 
+$( document ).ready(function() {
+  $('#bidule').click(function(ev) {
+    var leThis = $(this);
+    var laOption = $('input[name=option]:checked').val();
+        $.ajax({
+            url : 'bidon.php',
+            type : 'POST',
+            data : 'option='+ laOption,
+            dataType : 'json',
+            success : function(json) {
+                if (!enigmePallejaResolue) {
+                    if (json.resultat) {
+                        enigmePallejaResolue = true;
+                        dialogBox("Palleja : Ah oui !! J'y avais pas pensé !!");
+                        popupOuverte = false;
+                        myModal3.style.display = "none";
+                    }else{
+                        dialogBox("Palleja : Non, je ne pense pas que ce soit ça.");
+                        popupOuverte = false;
+                        myModal3.style.display = "none";
+                    }
+                }
+            },
+            error : function(statut) {
+            }
+        });
+    });
+});
+
+function introduction () {
+    var audioIntro = document.querySelector('#audioIntro');
+    audioIntro.play();
+
+    var introTime = 0;
+    var introTimeStamp=0;
+    var introLastRender=0;
+    var endOfIntro=0;
+
+    var mouvementTimeStamp=0;
+    var mouvementLastRender=0;
+    var lastAnimation=0;
+    var audioIntroBoom = document.querySelector('#audioIntroBoom');
+
+    var introLoop = function (introTimeStamp) {
+        window.scrollTo(0, 0);
+        if (introTime>=5000){
+            endOfIntro=introTime;
+            audioIntro.pause();
+            audioIntroBoom.play();
+            window.requestAnimationFrame(mouvementLoop);
+            return false;
+        }
+        var progress = introTimeStamp - introLastRender;
+        introTime+=progress;
+        introLastRender = introTimeStamp;
+        window.requestAnimationFrame(introLoop);
+    }
+
+    window.requestAnimationFrame(introLoop);
+
+    var mouvementLoop = function (mouvementTime, mouvementTimeStamp) {
+        window.scrollTo(0, 0);
+        if (mouvementTime-endOfIntro>=5000){
+            game_container.style.top="0px";
+            audioIntroBoom.pause();
+            document.body.onkeyup =
+            document.body.onkeydown = function(evt){
+                evt = evt || window.evt;
+                var charCode = evt.keyCode || evt.which;
+                if (charCode != F12KEY && (charCode<96 || charCode >105) && charCode !=8 && charCode != F5KEY)
+                    evt.preventDefault();
+                if(charCode==SPACEKEY && evt.type == 'keydown'){
+                    if (dialogBoxShown){
+                        deleteDialogue();
+                    }
+                }
+            }
+            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en vérouillage automatique \n"
+                        + "- Etudiant : Oh mince ! J'aurais dû faire des tests ! \n"
+                        + "- IA : Il vous reste "+totalSeconds+" secondes d'oxygene, il faut réparer le réacteur ! \n");
+            init();
+            return false;
+        }
+        if (mouvementTime>lastAnimation+100) {
+            game_container.style.top=game_container.style.top=="-5px"?"5px":"-5px";
+            lastAnimation = mouvementTime;
+        };
+        var progress = mouvementTimeStamp - endOfIntro - mouvementLastRender;
+        mouvementTime+=progress;
+        mouvementLastRender = mouvementTimeStamp;
+        window.requestAnimationFrame(mouvementLoop);
+    }
+}
+var game_container = document.getElementById("game");
+var gagne = false;
 
 var charXPosInitial = 0;
 var charYPosInitial = 0;
 
 var protege=false;
-var dialogBoxShown = false;
+var dialogBoxShown = false
 
 var tailleCase = 24;
-
+var enigmePallejaResolue = false;
 zoom = 6;
 var messageGlobal;
-document.onload = init();
+document.onload = introduction();
 var totalSeconds = 180;//initalisation du timer de début
 var totalSecondsInit = 180;//initalisation et début du timer
-var timerVar = setInterval(countTimer, 1000);
+
 
 var popupOuverte = false;
 
 
 game_container.style.zoom=zoom;
+
+/*
+function deverouillage(){
+    return "ACDC";
+}
+*/

@@ -1,0 +1,66 @@
+<doctype <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <button id="myBtn">Open Modal</button>
+    <div id="myModal2" class="modalCustom" style="z-index:9999">
+      <div class="modalCustom-content">
+        <span class="close">&times;</span>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Code à remplir : </label>
+            <p> Pour pouvoir accéder à cet ordinateur, il faut se connecter en tant qu'administrateur. <i> Vous trouvez un post-it sur le bord de l'écran où il est écrit : <b> Mot de passe : "fqpcnf" </b> </i> </p>
+            <p> Il me semble que ce mot de passe est codé avec une méthode assez simple... </p>
+            <p><small>P.S.: Vous devez simplement écrire le mot de passe décodé (Utilisez votre tête !)</small></p>
+          </div>
+          <div class="form-group">
+            <label for="mdp"> Mot de passe décodé : </label>
+            <input type="text" name="mdp" id="mdp"/><br />
+            <button id="machin" class="btn btn-default pull-right">Envoyé</button>
+          </div>
+
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      var modalCustom = document.getElementById('myModal2');
+      var btn = document.getElementById("myBtn");
+      var span = document.getElementsByClassName("close")[0];
+
+      btn.onclick = function() {
+          modalCustom.style.display = "block";
+      }
+
+      span.onclick = function() {
+          modalCustom.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+          if (event.target == modalCustom) {
+              modalCustom.style.display = "none";
+          }
+      }
+
+    </script>
+  </body>
+</html>

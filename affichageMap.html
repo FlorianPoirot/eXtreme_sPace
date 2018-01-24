@@ -23,18 +23,28 @@
     <audio id="audioPlayer">
         <source src="resMusic/boom.wav">
     </audio>
+    <audio id="audioIntro">
+        <source src="resMusic/son_du_vaisseau_debut.mp3">
+    </audio>
+    <audio id="audioIntroBoom">
+        <source src="resMusic/explosion_debut.mp3">
+    </audio>
 
     <div id="game" style="position:absolute">
 
+      <img class="obstacle" src="./resImg/chaise.png" style="left: 144px; top: 72px; z-index: 2">
       <img id="caissonGauche" class="obstacle" src="./resImg/caisson.gif" style="left: 72px; top: 168px; z-index: 2">
       <img id="caissonDroite" class="obstacle" src="./resImg/caissonFerme.png" style="left: 168px; top: 168px; z-index: 2">
       <img id="porteNord" src="./resImg/porte.png" style="left: 120px; top: 216px; z-index: 2">
+      <img id="baril" class="obstacle" src="./resImg/baril.gif" style="left: 24px; top: 384px; z-index: 2">
+      <img id="fluttershy" src="./resImg/fluttershy.png" style="left: 24px; top: 360px; z-index: 11; visibility:hidden">
       <img id="porteSud" src="./resImg/porte.png" style="left: 120px; top: 360px; z-index: 2">
       <img id="grandBureau" class="obstacle" src="./resImg/grand_bureau.gif" style="left: 24px; top: 240px; z-index: 2">
       <img id="petitBureau" class="obstacle" src="./resImg/bureau.gif" style="left: 216px; top: 336px; z-index: 2">
-      <img class="obstacle" src="./resImg/console.png" style="left: 120px; top: 408px; z-index: 2">
+      <img id="console" class="obstacle" src="./resImg/console.png" style="left: 120px; top: 408px; z-index: 2">
       <img class="obstacle" src="./resImg/reacteur.gif" style="left: 96px; top: 456px; z-index: 2">
-      <img id="personnage" src="./resImg/personnage.jpg" style="left: 120px; top: 72px; width: 16px; height: 16px; z-index: 10">
+      <img id="personnage" src="./resImg/persoArriere.png" style="left: 124px; top: 76px; width: 16px; height: 16px; z-index: 10">
+      <img id="xp" class="obstacle" src="./resImg/xpAvant.png" style="left: 76px; top: 266px; z-index: 2">
 
       <img src="" style="left: 0px; top: 0px"> <img src="" style="left: 24px; top: 0px"> <img src="" style="left: 48px; top: 0px"> <img src="" style="left: 72px; top: 0px">
       <img src="" style="left: 96px; top: 0px"> <img src="" style="left: 120px; top: 0px"> <img src="" style="left: 144px; top: 0px"> <img src="" style="left: 168px; top: 0px">
@@ -141,32 +151,64 @@
       <img src="" style="left: 192px; top: 480px"> <img src="" style="left: 216px; top: 480px"> <img src="" style="left: 240px; top: 480px"> <img src="" style="left: 264px; top: 480px">
       <img src="" style="left: 288px; top: 480px"> <img src="" style="left: 312px; top: 480px"> <img src="" style="left: 336px; top: 480px"> <img src="" style="left: 360px; top: 480px">
     </div>
-
-    <button id="myBtn">Open Modal</button>
-    <div id="myModal" class="modalCustom" style="z-index: 900;">
+    <div id="myModal" class="modalCustom" style="z-index:9999">
       <div class="modalCustom-content">
         <span class="close">&times;</span>
           <div class="form-group">
             <label for="exampleInputEmail1">Code à remplir : </label>
-            <p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">\'c4b0318bd5d514c92276e5cb55ce15359ce66579\' codé en sha1. </span> </p>
-            <p style="color:red;"><b>Le nom de la fonction devra impérativement s\'appeler : deverouillage() </b></p>
+            <p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">'c4b0318bd5d514c92276e5cb55ce15359ce66579' codé en sha1. </span> </p>
+            <p style="color:red;"><b>Le nom de la fonction devra impérativement s'appeler : deverouillage() </b></p>
           </div>
             <div class="form-group">
             <textarea name="code" rows="10" id="code"></textarea>
             <button id="truc" class="btn btn-default pull-right">Envoyé</button>
           </div>
-          
+
       </div>
     </div>
 
+    <div id="myModal2" class="modalCustom" style="z-index:9999">
+      <div class="modalCustom-content">
+        <span class="close">&times;</span>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Code à remplir : </label>
+            <p> Pour pouvoir accéder à cet ordinateur, il faut se connecter en tant qu'administrateur. <i> Vous trouvez un post-it sur le bord de l'écran où il est écrit : <b> Mot de passe : "fqpcnf" </b> </i> </p>
+            <p> Il me semble que ce mot de passe est codé avec une méthode assez simple... </p>
+            <p><small>P.S.: Vous devez semble écrire le mot de passe décodé (Utilisez votre tête !)</small></p>
+          </div>
+          <div class="form-group">
+            <label for="mdp"> Mot de passe décodé : </label>
+            <input type="text" name="mdp" id="mdp"/><br />
+            <button id="machin" class="btn btn-default pull-right">Envoyé</button>
+          </div>
+
+      </div>
+    </div>
+
+
+     <div id="myModal3" class="modalCustom" style="z-index:9999">
+       <div class="modalCustom-content">
+            <p>function painAuChocolatOuChocolatine(){$a=30000; $b=2.4; $donald=2.4*(300000*3600*24*365); $jeanfrancis=($donald/$a); return $jeanfrancis;}</p>
+         <span class="close">&times;</span>
+           <div class="form-group">
+             <label for="exampleInputEmail1">Résultat à trouver : </label>
+             <p> Sachant que notre vaisseau se déplace à 30 000km/s (et que votre collègue est incompétent quant au nommage des variables), devinez ce que renvoi cette fonction :</b> </i> </p>
+           </div>
+           <div class="form-group">
+             <input type="radio" name="option" value="option1"/><label for="option1"> Le nombre de personne dans le vaisseau </label><br />
+             <input type="radio" name="option" value="option2"/><label for="option2"> La vitesse du vaisseau </label><br />
+             <input type="radio" name="option" value="option3"/><label for="option3"> Le carburant restant </label><br />
+             <input type="radio" name="option" value="option4"/><label for="option4"> Le temps restant pour atteindre la Terre </label><br />
+             <input type="radio" name="option" value="option5"/><label for="option5"> Ma durée de vie après la défaillance du vaisseau </label><br />
+             <button id="bidule" class="btn btn-default pull-right">Envoyé</button>
+           </div>
+
+       </div>
+     </div>
+
     <script>
       var modalCustom = document.getElementById('myModal');
-      var btn = document.getElementById("myBtn");
       var span = document.getElementsByClassName("close")[0];
-
-      btn.onclick = function() {
-          modalCustom.style.display = "block";
-      }
 
       span.onclick = function() {
           modalCustom.style.display = "none";
