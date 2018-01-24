@@ -65,6 +65,7 @@ function loop(timestamp) {
 }
 
 function init(){
+    timerVar = setInterval(countTimer, 1000);
     time = 0;
     lastRender = 0;
 
@@ -99,6 +100,7 @@ function init(){
             if(charCode==SPACEKEY && evt.type == 'keydown'){
                 if (dialogBoxShown){
                     deleteDialogue();
+                    window.requestAnimationFrame(loop);
                 }else{
                     characterMiddleX = character.xPos + (character.width)/2;
                     characterMiddleY = character.yPos + (character.height)/2;
@@ -112,7 +114,7 @@ function init(){
     };
 
     window.scrollTo(Math.min(character.xPos*zoom-(window.innerWidth/2)+10*zoom, 400*zoom-(window.innerWidth/2)), Math.min(character.yPos*zoom-(window.innerHeight/2)+10*zoom, 528*zoom-(window.innerHeight/2)));
-    window.requestAnimationFrame(loop);
+    //window.requestAnimationFrame(loop);
 }
 
 var afficheDialogue = function(objet){
@@ -815,9 +817,6 @@ function dialogBox (message) {
     div.style.zIndex=999;
     div.style.position="fixed";
     div.setAttribute("class", "col-sm-8 col-sm-offset-2");
-    //div.style.width = document.documentElement.clientWidth/2+"px";
-    //div.style.top = (document.documentElement.clientHeight)+"px";
-    //div.style.left = document.documentElement.clientWidth/4+"px";
     div.style.height = "15%";
     div.style.wordWrap = "break-word";
     div.style.bottom = "-10px";
@@ -840,7 +839,6 @@ function deleteDialogue () {
     }
     dialogBoxShown = false;
     jeu_commence = true;
-    window.requestAnimationFrame(loop);
 }
 
 function countTimer() {
@@ -856,14 +854,6 @@ function countTimer() {
         if (hour<10) {echoHour = "0"+hour}
         if (minute<10) {echoMinute = "0"+minute}
         if (seconds<10) {echoSeconds = "0"+seconds}
-            /*var timer = document.getElementById("timer");
-            //timer.style.border = "solid 2px";
-            timer.style.zIndex=999;
-            timer.style.fontSize = "20px";
-            timer.style.left = "0px";
-            timer.style.top = "0px";
-            timer.style.font = "bold 20px arial,serif";
-            timer.innerHTML = echoHour + ":" + echoMinute + ":" + echoSeconds; */
         } else {
             clearInterval(timerVar);
             var game = document.getElementById("game");
@@ -875,35 +865,14 @@ function countTimer() {
             "<div style=\"position:absolute;margin-left: 60px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<div style=\"position:absolute;margin-left: 130px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
             "<div style=\"position:absolute;margin-left: 180px;margin-top:130;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
-            "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"
+            "<div style=\"position:absolute;margin-left: 300px;\"><img  src=\"resImg/boom1.gif\" alt=\"boom\"></div>"+
+            "<button style=\"position:absolute; zIndex:99999;\" onclick=\"location.reload()\">Recommencer</button>"
             jeu_commence = false;
         }
     } else {
         totalSeconds = totalSecondsInit;
     }
 }
-
-/*function popUp (x,y) {
-    popupOuverte = true;
-    var div = document.createElement('div');
-    div.style.zIndex=999;
-    div.style.position="absolute";
-    div.style.top = x+"px";
-    div.style.left = y+"px";
-    div.style.fontWeight = "bold";
-    div.innerHTML ='<div class="row col-sm-8 col-sm-offset-2 popup-brutforce" id="gamePopUp">'+
-                        '<div class="form-group">'+
-                            '<label for="exampleInputEmail1">Code à remplir : </label>'+
-                            '<p> Pour déverouiller cette porte, vous devez décoder ce mot de passe (en force brute) : <span style="color:red">\'c4b0318bd5d514c92276e5cb55ce15359ce66579\' codé en sha1. </span> </p>'+
-                            '<p style="color:red;"><b>Le nom de la fonction devra impérativement s\'appeler : deverouillage() </b></p>'+
-                        '</div>'+
-                        '<div class="form-group">'+
-                          '<textarea name="code" rows="8" id="code"></textarea>'+
-                        '</div>'+
-                        '<button id="truc" class="btn btn-default pull-right">Envoyé</button>'+
-                    '</div>';
-    document.body.appendChild(div);
-}*/
 
 function resizeBody () {
     document.body.style.width = document.documentElement.clientWidth;
@@ -1003,6 +972,21 @@ function introduction () {
         if (mouvementTime-endOfIntro>=5000){
             game_container.style.top="0px";
             audioIntroBoom.pause();
+            document.body.onkeyup =
+            document.body.onkeydown = function(evt){
+                evt = evt || window.evt;
+                var charCode = evt.keyCode || evt.which;
+                if (charCode != F12KEY && (charCode<96 || charCode >105) && charCode !=8 && charCode != F5KEY)
+                    evt.preventDefault();
+                if(charCode==SPACEKEY && evt.type == 'keydown'){
+                    if (dialogBoxShown){
+                        deleteDialogue();
+                    }
+                }
+            }
+            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en verrouillage automatique \n"
+                        + "- Etudiant : Oh mince ! J'aurais dû faire des tests ! \n"
+                        + "- IA : Il vous reste "+totalSeconds+" secondes d'oxygene, il faut réparer le réacteur ! \n");
             init();
             return false;
         }
@@ -1032,7 +1016,7 @@ var messageGlobal;
 document.onload = introduction();
 var totalSeconds = 180;//initalisation du timer de début
 var totalSecondsInit = 180;//initalisation et début du timer
-var timerVar = setInterval(countTimer, 1000);
+
 
 var popupOuverte = false;
 
