@@ -125,7 +125,7 @@ var afficheDialogue = function(objet){
     switch(objet){
         case porteNord:
             if(porteNord.verouillee) {
-                dialogBox("Etudiant : C'est la porte Nord, elle est verRouillée, peut-être qu'à l'ordinateur central, je pourrais trouver un moyen de l'ouvrir.");
+                dialogBox("Etudiant : C'est la porte Nord, elle est verrouillée, peut-être qu'à l'ordinateur central, je pourrais trouver un moyen de l'ouvrir.");
             }else{
                 dialogBox("Etudiant : C'est la porte Nord, elle mène au cockpit.");
             }
