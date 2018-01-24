@@ -123,7 +123,7 @@ function init(){
 
 function testlol () {
     document.getElementById("game").innerHTML="";
-    document.body.innerHTML += 
+    document.body.innerHTML +=
     '<div class="col-xs-8 col-xs-offset-2">'+
     '<marquee id="generique" style=" position: absolute;font-size: 2em; font-weight: bold;font-variant: small-caps;color: rgb(255, 255, 255);text-align: center; left: 88px;width: 269px;" direction="up" scrollamount="3">'+
       'Réalisé par : Les White Obamas </br>'+
@@ -152,7 +152,7 @@ function testlol () {
       '</br>'+
       '</br>'+
       'PS : Elle  est pas mal la musique ;)</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>'+
-      //'<img src="resImg/Capture.png"></img>'+      
+      //'<img src="resImg/Capture.png"></img>'+
     '</marquee>'+
     '</div>';
 
@@ -969,7 +969,7 @@ $( document ).ready(function() {
                 if(porteSud.verouillee){
                     if(json.resultat){
                         porteSud.verouillee=false;
-                        dialogBox("Etudiant : SUPER !! J'ai déverouillé la porte !!!");
+                        dialogBox("Etudiant : SUPER !! J'ai déverrouillé la porte !!!");
                         popupOuverte = false;
                         modalCustom.style.display = "none";
                     }else{
