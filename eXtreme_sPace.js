@@ -127,12 +127,16 @@ var afficheDialogue = function(objet){
             }
             break;
         case porteSud:
-            if(porteSud.verouillee) {
-                modalCustom.style.display = "block";
-                popupOuverte = true;
-                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverrouiller.");
+            if(enigmePallejaResolue){
+                if(porteSud.verouillee) {
+                    modalCustom.style.display = "block";
+                    popupOuverte = true;
+                    dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Il me faut la déverrouiller.");
+                }else{
+                    dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverrouillée.");
+                }
             }else{
-                dialogBox("Etudiant : C'est la porte Sud, elle mène aux réacteurs du vaisseau. Elle est déverrouillée.");
+                dialogBox("IA : M.Palleja te recherche, tu ferais mieux d'aller le voir");
             }
             break;
         case bibliotheque:
@@ -163,7 +167,7 @@ var afficheDialogue = function(objet){
             dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
         case litDeux:
-            dialogBox("Etudiant : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
+            dialogBox("IA : Ce n'est pas le moment de dormir, le vaisseau est endommagé");
             break;
         case baril:
             if(fluttershy.model.style.visibility=="hidden") {
@@ -174,12 +178,18 @@ var afficheDialogue = function(objet){
             }
             break;
         case xp:
-          if (character.direction==DROITE) {
-            xp.model.src="resImg/xpGauche.png";
-          } else {
-            xp.model.src="resImg/xpAvant.png";
-          }
-          dialogBox("Xavier Palleja : J'adore l'eXtreme Programming <3");
+            if (character.direction==DROITE) {
+                xp.model.src="resImg/xpGauche.png";
+            } else {
+                xp.model.src="resImg/xpAvant.png";
+            }
+            if(enigmePallejaResolue){
+                dialogBox("M.Palleja : J'adore l'eXtreme Programming <3");
+            }else{
+                myModal3.style.display = "block";
+                popupOuverte = true;
+                dialogBox("M.Palleja : Un élève m'a  donner ce code, tu peux me dire ce qu'il fait ? Il sent les poubelles pas sorties depuis au moins deux mois.");
+            }
           break;
         case maConsole:
             if (!gagne){
@@ -938,6 +948,35 @@ $( document ).ready(function() {
     });
 });
 
+$( document ).ready(function() {
+  $('#bidule').click(function(ev) {
+    var leThis = $(this);
+    var laOption = $('input[name=option]:checked').val();
+        $.ajax({
+            url : 'bidon.php',
+            type : 'POST',
+            data : 'option='+ laOption,
+            dataType : 'json',
+            success : function(json) {
+                if (!enigmePallejaResolue) {
+                    if (json.resultat) {
+                        enigmePallejaResolue = true;
+                        dialogBox("Palleja : Ah oui !! J'y avais pas pensé !!");
+                        popupOuverte = false;
+                        myModal3.style.display = "none";
+                    }else{
+                        dialogBox("Palleja : Non, je ne pense pas que ce soit ça.");
+                        popupOuverte = false;
+                        myModal3.style.display = "none";
+                    }
+                }
+            },
+            error : function(statut) {
+            }
+        });
+    });
+});
+
 function introduction () {
     var audioIntro = document.querySelector('#audioIntro');
     audioIntro.play();
@@ -984,7 +1023,7 @@ function introduction () {
                     }
                 }
             }
-            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en verrouillage automatique \n"
+            dialogBox("- IA : CRITICAL ERROR ! Le vaisseau est passé en vérouillage automatique \n"
                         + "- Etudiant : Oh mince ! J'aurais dû faire des tests ! \n"
                         + "- IA : Il vous reste "+totalSeconds+" secondes d'oxygene, il faut réparer le réacteur ! \n");
             init();
@@ -1010,7 +1049,7 @@ var protege=false;
 var dialogBoxShown = false
 
 var tailleCase = 24;
-
+var enigmePallejaResolue = false;
 zoom = 6;
 var messageGlobal;
 document.onload = introduction();
